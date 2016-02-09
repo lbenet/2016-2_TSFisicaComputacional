@@ -1,1 +1,1 @@
-Windows es mejor
+Linux es mejor
