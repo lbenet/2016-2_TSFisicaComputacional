@@ -69,6 +69,10 @@ en combinación con [IJulia](https://github.com/JuliaLang/IJulia.jl) en clase.
 	- [Become a Git guru](https://www.atlassian.com/git/tutorials/)
 
 	- [Learn Git branching](http://pcottle.github.io/learnGitBranching)
+        
+	- [HAllo World en GitHub](https://guides.github.com/activities/hello-world/)
+
+	- [Sincronizar un fork](https://help.github.com/articles/syncing-a-fork/)
 
 - **Guía de sintaxis en markdown**
 
