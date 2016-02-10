@@ -1,7 +1,0 @@
- ! [rejected]        master -> master (fetch first)
- error: failed to push some refs to 'https://github.com/FernandaPerez/2016-2_TSFisicaComputacional.git'
- consejo: Updates were rejected because the remote contains work that you do
- consejo: not have locally. This is usually caused by another repository pushing
- consejo: to the same ref. You may want to first integrate the remote changes
- consejo: (e.g., 'git pull ...') before pushing again.
- consejo: See the 'Note about fast-forwards' in 'git push --help' for details.
