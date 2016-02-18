@@ -10,7 +10,3 @@
 |:------------------:|:------------------------:|:----------------------:|
 | Ejercicios previos |    Lunes 8 de febrero    |  Martes 23 de febrero  |
 |      Tarea 1       |    Lunes 15 de febrero   |    Martes 1 de marzo   |
-
-Aquí irán sus tareas
-
-![Bilby Stampede](http://img.memecdn.com/homework_o_253283.jpg)
