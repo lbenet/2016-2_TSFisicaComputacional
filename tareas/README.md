@@ -6,11 +6,12 @@
 
 # Fechas
 
-|     Asignación     | Fecha inicial de entrega | Fecha final de entrega |
-|:------------------:|:------------------------:|:----------------------:|
-| Ejercicios previos |    Lunes 8 de febrero    |  Martes 23 de febrero  |
-|      Tarea 1       |    Lunes 15 de febrero   |    Martes 1 de marzo   |
-|      Tarea 2       |    Lunes 22 de febrero   |    Martes 8 de marzo   |
+|     Asignación     | Fecha inicial de entrega | Fecha final de entrega  |         Estado         |
+|:------------------:|:------------------------:|:-----------------------:|:----------------------:|
+| Ejercicios previos |    Lunes 8 de febrero    |  Martes 23 de febrero   |    Ya no se acepta     |
+|      Tarea 1       |    Lunes 15 de febrero   |    Martes 1 de marzo    |      Aún se acepta     |
+|      Tarea 2       |    Lunes 22 de febrero   |    Martes 8 de marzo    |      Aún se acepta     |
+|      Tarea 3       |    Lunes 29 de febrero   |    Martes 15 de marzo   |      Aún se acepta     |
 
 =====================
 
@@ -21,3 +22,5 @@
 - La tarea 1 se encuentra [aquí](https://github.com/lbenet/2016-2_TSFisicaComputacional/blob/master/tareas/Tarea1.ipynb).
 
 - La tarea 2 se encuentra [aquí](https://github.com/lbenet/2016-2_TSFisicaComputacional/blob/master/tareas/Tarea2.ipynb).
+
+- Como tarea 3 deben subir el notebook [06_Derivacion_numerica.ipynb](https://github.com/lbenet/2016-2_TSFisicaComputacional/blob/master/notas_clase/06_Derivacion_numerica.ipynb) en su carpeta de tareas, propiamente contestado.
