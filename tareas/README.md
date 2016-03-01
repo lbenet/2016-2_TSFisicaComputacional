@@ -11,7 +11,7 @@
 | Ejercicios previos |    Lunes 8 de febrero    |  Martes 23 de febrero   |    Ya no se acepta     |
 |      Tarea 1       |    Lunes 15 de febrero   |    Martes 1 de marzo    |      Aún se acepta     |
 |      Tarea 2       |    Lunes 22 de febrero   |    Martes 8 de marzo    |      Aún se acepta     |
-|      Tarea 3       |    Lunes 29 de febrero   |    Martes 15 de marzo   |      Aún se acepta     |
+|      Tarea 3       |    Lunes 29 de febrero   |    Martes 8 de marzo   |      Aún se acepta     |
 
 =====================
 
