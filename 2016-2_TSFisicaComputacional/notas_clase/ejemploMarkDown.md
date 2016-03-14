@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-# Sección
-## Sub-sección
-### Sub-sub-sección
-- *Cursivas* se escriben entre dos "*"
-- **Negritas** se escriben entre dos asteriscos consecutivos "*""*"
-- Uno puede escribir ... (Aqui faltan un par de ejemplo...)
-
-
-Más o menos, de igual manera, uno puede insertar imágenes, vídeo, etc.
-
-De hecho, uno puede crear documentos que *incluyen* ecuaciones, usando vil y barato 'LaTex' (o de hecho, variaciones raras de 'Tex'): $E=mc^2$
-
-Para cualquier duda, pregúntele a Google, o Uriel.
-
-
-=======
 # Ejemplo `MarkDown`
 
 ## Sec 1: Cosas básicas
@@ -46,4 +29,3 @@ Más o menos, de igual manera, uno puede insertar imágenes, videos, etc.
 De hecho, uno puede crear documentos que *incluyen* ecuaciones, usando vil y barato `LaTex` (o de hecho, variaciones raras de `TeX`): $E = mc^2$
 
 Para cualquier duda, pregúntele a Google, o Uriel.
->>>>>>> c9b12a0195143e2212d8576a4d3f3d9e56356e8f
