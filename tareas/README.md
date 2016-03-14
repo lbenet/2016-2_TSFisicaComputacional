@@ -1,10 +1,10 @@
-# Avisos
+# Reglas
 
-- **Las fechas finales son para que manden su pull request.**
+- Las fechas finales son para que manden su pull request.
 
-- **Por equipo se debe mandar solamente un pull request referenciando a los miembros del equipo en la conversación.**
+- Por equipo se debe mandar **solamente un pull request** referenciando a los miembros del equipo en la conversación.
 
-- **Por cada tarea debe haber un pull request que contenga sólo material relacionado con la tarea en cuestión. Sin un pull request contiene material de más de una tarea será rechazado.**
+- Por cada tarea debe haber **un pull request** que contenga **sólo** material relacionado con la tarea en cuestión. Sin un pull request contiene material de más de una tarea **será rechazado**.
 
 =====================
 
