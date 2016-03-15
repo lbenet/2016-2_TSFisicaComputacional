@@ -24,13 +24,15 @@ Hasta las 4:00 pm del 15 de Marzo, faltaban:
 
 6. Tests adecuados
 
+7. METAPROGRAMMING
+
 ## Tareas delegadas (puede cambiar)
 
 Lui: 1 tan, 4 y mitad 6
 
 Leo: funciones que faltan de 1 y 3 completo
 
-Art: 2, 5, optimizar y ver si hay errores 
+Art: 2, 5, 7 (importante checar lo de la metaprogramación)
 
 
 Checamos los tests en la semana
