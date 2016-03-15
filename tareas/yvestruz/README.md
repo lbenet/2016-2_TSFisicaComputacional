@@ -11,7 +11,7 @@ sec
 csc
 hiperbólicas
 
-2. Ejercicio con sin(x²-2/x⁶)
+2. Ejercicio con sin(x^3 - 2/x^6)
 	- Graficar f'(x)
 
 3. Método de Newton para una función arbitraria
@@ -27,8 +27,11 @@ hiperbólicas
 ## Tareas delegadas (puede cambiar)
 
 Lui: 1 tan, 4 y mitad 6
+
 Leo: funciones que faltan de 1 y 3 completo
+
 Art: 2, 5, optimizar y ver si hay errores 
+
 
 Checamos los tests en la semana
 
