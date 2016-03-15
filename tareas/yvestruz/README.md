@@ -11,12 +11,12 @@ sec
 csc
 hiperbólicas
 
-2. Ejercicio con $\sin(x^3-\frac{2}{x^6})$
+2. Ejercicio con sin(x²-2/x⁶)
 	- Graficar f'(x)
 
 3. Método de Newton para una función arbitraria
 	- Polinomio de Wilkinson con iterados iniciales
-	- Para $x\sin(2x)$
+	- Para x\sin(2x)
 
 4. Contestar la pregunta para las segundas, terceras, etc derivadas
 
