@@ -4,12 +4,12 @@ Hasta las 4:00 pm del 15 de Marzo, faltaban:
 
 1. Funciones
 
-tan
+	- tan
 
-cot
-sec
-csc
-hiperbólicas
+	- cot
+	sec
+	csc
+	hiperbólicas
 
 2. Ejercicio con sin(x^3 - 2/x^6)
 	- Graficar f'(x)
