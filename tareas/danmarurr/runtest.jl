@@ -26,3 +26,12 @@ b = xdual(2)
 @test a/5 == Dual(1/5, 0)
 @test 5/b == Dual(5/2, -5/4)
 @test 1 + b == Dual(3,1)
+
+@test b^2 == Dual(4, 4)
+@test b^(0.5) == Dual(sqrt(2), 0.5/(sqrt(2)))
+@test b^(1//2) == Dual(sqrt(2), 0.5/(sqrt(2)))
+@test b^pi == Dual(b.fun^pi, pi*b.fun^(pi - 1.0)*b.der)
+
+@test a^2 == Dual(1, 0)
+@test a^(0.5) == Dual(sqrt(1), 0)
+@test a^(1//2) == Dual(sqrt(1), 0)

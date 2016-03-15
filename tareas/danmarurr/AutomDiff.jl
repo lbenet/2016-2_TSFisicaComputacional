@@ -32,7 +32,10 @@ module AD
     -(a::Dual, b::Dual) = Dual(a.fun - b.fun, a.der - b.der)
     *(a::Dual, b::Dual) = Dual(a.fun * b.fun, a.der*b.fun + b.der*a.fun)
     /(a::Dual, b::Dual) = Dual(a.fun / b.fun, (a.der - b.der*(a.fun/b.fun))/b.fun)
-    ^{T<:Real}(a::Dual, α::T) = Dual(a.fun^α, α*a.fun^(α - 1)*a.der)
+    ^{T<:Int}(a::Dual, α::T) = Dual(a.fun^α, α*a.fun^(α - 1)*a.der)
+    ^{T<:Float64}(a::Dual, α::T) = Dual(a.fun^α, α*a.fun^(α - 1)*a.der)
+    ^{T<:Rational}(a::Dual, α::T) = Dual(a.fun^α, α*a.fun^(α - 1)*a.der)
+    ^{T<:Irrational}(a::Dual, α::T) = Dual(a.fun^α, α*a.fun^(α - 1)*a.der)
     ==(a::Dual, b::Dual) = (a.fun == b.fun && a.der == b.der)
 
 
