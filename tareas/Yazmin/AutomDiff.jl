@@ -1,8 +1,10 @@
+#22/03/16
 
-# Aqui viene una explicación de lo que se hace en el módulo, los autores y la fecha
-#Este módulo implementa la definición del tipo dual, así como sus operaciones.
+#Este módulo implementa la definición del tipo dual, así como la de sus operaciones.
 
-
+#Rodríguez Rosenblueth César Daniel
+#Santiago Santos Eva Yazmín
+#Hernández de la Vega Alejandro
 
 __precompile__(true)
 
