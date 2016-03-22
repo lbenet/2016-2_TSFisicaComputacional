@@ -13,15 +13,19 @@ module AD
 
     export Dual, xdual
 
+#Se define el Dual con sus dos entradas, la función y la derivada
 type Dual{D <: Real}
     fun::D
     der::D
     
 end
+
+#Definimos el Dual de una constante y promovemos las entradas.
 Dual(a,b)=Dual(promote(a,b)...)
 
 Dual(a)=Dual(a,0)
 
+#Definimos una función para identificar la variable independiente. 
 function xdual(x)
     if typeof(x) <: Real
         fun=x
@@ -32,9 +36,9 @@ end
 
 import Base: +, -, *, /, ^
 
-# Aqui se implementan los métodos necesarios para cada función
+# Aqui se implementan las operaciones entre Duales y con Duales y reales.
+
 for fn1 = (:+, :-)
-    println(fn1)
     ex = quote
         function ($fn1)(a::Dual, b::Dual)
             xx = ($fn1)(a.fun, b.fun)
@@ -42,12 +46,10 @@ for fn1 = (:+, :-)
             return Dual(xx, yy)
         end
     end
-    println(ex)
     @eval $ex
 end
 
 for fn2 in (:*,), fn3 in (:+,)
-    println(fn2)
     ex = quote
         function ($fn2)(a::Dual, b::Dual)
             xx = ($fn2)(a.fun, b.fun)
@@ -55,13 +57,11 @@ for fn2 in (:*,), fn3 in (:+,)
             return Dual(xx, yy)
         end
     end
-    println(ex)
     @eval $ex
 end
 
 
 for fn4 = (:/,), fn5 = (:*,), fn6 = (:-,)
-    println(fn4)
     ex = quote
         function ($fn4)(a::Dual, b::Dual)
             xx = ($fn4)(a.fun, b.fun)
@@ -69,12 +69,10 @@ for fn4 = (:/,), fn5 = (:*,), fn6 = (:-,)
             return Dual(xx, yy)
         end
     end
-    println(ex)
     @eval $ex
 end
 
 for fn7 = (:^,), fn8 = (:*,)
-    println(fn7)
     ex = quote
         function ($fn7)(a::Dual, b::Float64)
             xx = ($fn7)(a.fun, b)
@@ -82,12 +80,10 @@ for fn7 = (:^,), fn8 = (:*,)
             return Dual(xx, yy)
         end
     end
-    println(ex)
     @eval $ex
 end
 
 for fn9 = (:+, :-)
-    println(fn9)
     ex = quote
         function ($fn9)(a::Dual)
             xx = ($fn9)(a.fun)
@@ -95,45 +91,20 @@ for fn9 = (:+, :-)
             return Dual(xx, yy)
         end
     end
-    println(ex)
     @eval $ex
 end
 
-
-#Aqui definimos lo que hace falta para la multiplicación y division de un número con un dual, y la suma y resta 
-#con numeros reales.
-function *(a::Real,b::Dual)
-    Dual(a)*b
-end
-
-function *(a::Dual,b::Real)
-    return b*a
-end
-
-#Para la suma y la resta, al derivar una constante esta se hace cero por lo que la segunda entrada no debe cambiar.
-function +(a::Real,b::Dual)
-    Dual(a)+b
-end
-
-function +(a::Dual,b::Real)
-    return b+a
-end
-
-function -(a::Real,b::Dual)
-    Dual(a)-b
-end
-
-function -(a::Dual,b::Real)
-    return a-Dual(b)
-end
-
-#La división
-function /(a::Dual,b::Real)
-    a/Dual(b)
-end
-
-function /(a::Real,b::Dual)
-    Dual(a)/b
+#Finalmente definimos las operaciones de Duales con reales.
+for fn10 = (:+, :-, :*, :/,)
+    ex = quote
+        function ($fn10)(a::Real, b::Dual)
+            return ($fn10)(Dual(a),b)
+        end
+        function ($fn10)(a::Dual, b::Real)
+            return ($fn10)(a,Dual(b))
+        end
+    end
+    @eval $ex
 end
     
 
