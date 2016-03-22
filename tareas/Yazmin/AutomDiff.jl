@@ -9,7 +9,7 @@
 __precompile__(true)
 
 module AD
-    import Base: +, -, *, /, ^
+    import Base: +, -, *, /, ^, ==
 
     export Dual, xdual
 
@@ -21,9 +21,9 @@ type Dual{D <: Real}
 end
 
 #Definimos el Dual de una constante y promovemos las entradas.
-Dual(a,b)=Dual(promote(a,b)...)
+Dual(fun,der) = Dual(promote(fun, der)...)
 
-Dual(a)=Dual(a,0)
+Dual(a::Real) = Dual(a,0...)
 
 #Definimos una función para identificar la variable independiente. 
 function xdual(x)
@@ -34,7 +34,7 @@ function xdual(x)
     end   
 end
 
-import Base: +, -, *, /, ^
+import Base: +, -, *, /, ^, ==
 
 # Aqui se implementan las operaciones entre Duales y con Duales y reales.
 
@@ -106,7 +106,9 @@ for fn10 = (:+, :-, :*, :/,)
     end
     @eval $ex
 end
-    
+ 
+#Identificación
+        ==(a::Dual, b::Dual) = (a.fun == b.fun && a.der == b.der) ? true : false 
 
 
 end
