@@ -35,3 +35,21 @@ b = xdual(2)
 @test a^2 == Dual(1, 0)
 @test a^(0.5) == Dual(sqrt(1), 0)
 @test a^(1//2) == Dual(sqrt(1), 0)
+
+#Funcion que prueba en un dual con ayuda de metaprogramming
+
+d1 = xdual(π/2)
+function probar_en_dual(d::Dual)  
+    for exp in Vec_Func
+        fun = exp[1]
+        der = exp[2]
+
+        e = quote
+            p = ($fun)($d) == Dual(($fun)($d.fun), (($der)($d.fun))*$d.der) 
+        end
+        
+        @eval $e
+        #println(p)
+        @test p
+    end            
+end

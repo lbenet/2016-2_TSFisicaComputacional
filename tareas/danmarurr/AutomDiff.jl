@@ -54,4 +54,43 @@ module AD
     /{T<:Real}(γ::T, a::Dual)= /(Dual(γ), a)
 
 
+#Importamos todas las funciones para las cuales queremos definir su operacion 
+import Base: ^, exp, sqrt, cbrt, sin, cos, tan, cot, sec, csc, sinh, cosh, tanh, coth, sech, csch,
+asin,   acos,   atan,   acot,   asec,   acsc,
+asinh,  acosh,  atanh,  acoth,  asech,  acsch
+
+#Vector con todos los símbolos asociados a las funciones trigométricas, exponenciales, etc. y sus respectivas
+#derivadas
+Vec_Func = [(:sin, :cos), (:cos, :(x -> -sin(x))), (:tan, :(x -> (sec(x))^2)), (:cot, :(x -> -(csc(x))^2)), 
+    (:sec, :(x -> sec(x)*tan(x))), (:csc, :(x -> -csc(x)*cot(x))), (:sinh, :cosh), (:cosh, :sinh), 
+    (:tanh, :(x -> (sech(x))^2)), (:coth, :(x -> -(csch(x))^2)), (:asin, :(x -> 1/sqrt(1-x^2))), 
+    (:acos, :(x -> -1/sqrt(1-x^2))), (:atan, :(x -> 1/(1+x^2))), (:acot, :(x -> -1/(1+x^2))),
+    (:asec, :(x -> 1/(sqrt(1-x^-2)*x^2))), (:acsc, :(x -> -1/(sqrt(1-x^-2)*x^2))), (:asinh, :(x -> 1/sqrt(1+x^2))),
+    (:acosh, :(x -> 1/sqrt(x^2-1))), (:atanh, :(x -> 1/(1-x^2))), (:acoth, :(x -> 1/(1-x^2))),
+    (:asech, :(x -> 1/(x*sqrt(1-x^2)))), (:acsch, :(x -> 1/(x*sqrt(1-x^2)))), (:acsch, :(x -> -1/(x*sqrt(1+x^2)))),
+    (:sqrt, :(x -> 1/(2*sqrt(x)))), (:exp, :exp), (:cbrt, :(x -> 1/(3*x^(2/3))))]
+
+#Casos especiales: los logarítmos y a^x
+log(a::Dual) = Dual(log(a.fun), a.der/a.fun)
+log{T<:Real}(b::T, a::Dual) = Dual(log(b,a.fun), a.der/(log(b)*a.fun))
+^{T<:Real}(b::T, a::Dual) = Dual(b^a.fun, a.der*log(b)*b^a.fun)
+
+#Loop para crear los nuevos métodos a partir de los símbolos
+for r in 1:length(Vec_Func)
+    fn = Vec_Func[r][1] #El primer símbolo está asociado a la función
+    der = Vec_Func[r][2] #El segundo símbolo está asociado a la derivada de la función
+    ex = quote #Creamos una nueva expresión
+        function ($fn)(a::Dual) #Definimos fn(a::Dual)
+            fun = ($fn)(a.fun)
+            derv = ($der)(a.fun)
+            return Dual(fun, derv*a.der) #Aplicamos la regla de la cadena
+        end
+    end
+    @eval $ex #Evaluamos la expresión para crear el método
 end
+
+
+
+
+end
+
