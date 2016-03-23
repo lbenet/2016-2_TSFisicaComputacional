@@ -9,44 +9,57 @@ __precompile__(true)
 module AD
     import Base: +, -, *, /, ^
 
-    export NumDual, xdual
+    export Dual, xdual
 
-    immutable NumDual{T <: Real}
-        funcion::T
-        derivada::T
+    """Definición de los duales, donde 'fun' es la variable de la funcion
+    evaluada en x_0, y 'der' es la variable de la derivada en x_0
+    ...
+    """
+    type Dual{T<:Real} #<: Real
+        fun :: T
+        der :: T
     end
 
     import Base.convert
     import Base.promote_rule
     import Base.+
 
-    NumDual(a,b) = NumDual(promote(a,b)...)
-    NumDual(a) = NumDual(a, zero(a))
+    Dual(a,b) = Dual(promote(a,b)...)
+    Dual(a) = Dual(a, zero(a))
 
-    convert{T<:Real}(::Type{NumDual{T}}, a::T) = Dual(a)
-    convert{T<:Real, S<:Real}(::Type{NumDual{T}}, a::S) = NumDual(convert(T,a))
+    convert{T<:Real}(::Type{Dual{T}}, a::T) = Dual(a)
+    convert{T<:Real, S<:Real}(::Type{Dual{T}}, a::S) = Dual(convert(T,a))
 
-    promote_rule{T<:Real, S<:Real}(::Type{NumDual{T}}, ::Type{S}) =
-        NumDual{(promote_type)(T,S)}
-
+    promote_rule{T<:Real, S<:Real}(::Type{Dual{T}}, ::Type{S}) =
+        Dual{(promote_type)(T,S)}
+        
     function xdual(x0)
-        NumDual(x0,1)
+        Dual(x0,1)
     end
 
-    +(a::NumDual, b::NumDual) = NumDual(a.funcion + b.funcion, a.derivada + b.derivada)
-    +(a::Real, b::NumDual) = NumDual(a + b.funcion, b.derivada)
-    +(a::NumDual, b::Real) = NumDual(a.funcion + b, a.derivada)
-    -(a::NumDual, b::NumDual) = NumDual(a.funcion - b.funcion, a.derivada - b.derivada)
-    -(a::Real, b::NumDual) = NumDual(a - b.funcion, b.derivada)
-    -(a::NumDual, b::Real) = NumDual(a.funcion - b, a.derivada)
-    *(a::NumDual, b::NumDual) = NumDual(a.funcion * b.funcion, a.funcion*b.derivada + b.funcion*a.derivada)
-    *(a::Real, b::NumDual) = NumDual(a * b.funcion, a*b.derivada)
-    *(a::NumDual, b::Real) = NumDual(a.funcion * b, b*a.derivada)
-    /(a::NumDual, b::NumDual) = NumDual(a.funcion / b.funcion, (a.derivada - ((a.funcion/b.funcion)*b.derivada)) / b.funcion)
-    /(a::Real, b::NumDual) = NumDual(a / b.funcion, ((a/b.funcion)*b.derivada) / b.funcion)
-    /(a::NumDual, b::Real) = NumDual(a.funcion / b, a.derivada / b)
-    ^(a::NumDual, b::Integer) = NumDual(a.funcion^b, (b*(a.funcion^(b-1))) * a.derivada)
-    ^(a::NumDual, b::Real) = NumDual(a.funcion^b, (b*(a.funcion^(b-1))) * a.derivada)
-    ==(a::NumDual, b::NumDual) = a.funcion==b.funcion && a.derivada==b.derivada
+    +(a::Dual, b::Dual) = Dual(a.fun + b.fun, a.der + b.der)
+    +(a::Real, b::Dual) = Dual(a + b.fun, b.der)
+    +(a::Dual, b::Real) = Dual(a.fun + b, a.der)
+
+    -(a::Dual, b::Dual) = Dual(a.fun - b.fun, a.der - b.der)
+    -(a::Real, b::Dual) = Dual(a - b.fun, b.der)
+    -(a::Dual, b::Real) = Dual(a.fun - b, a.der)
+
+    *(a::Dual, b::Dual) = Dual(a.fun * b.fun, a.fun*b.der + b.fun*a.der)
+    *(a::Real, b::Dual) = Dual(a * b.fun, a*b.der)
+    *(a::Dual, b::Real) = Dual(a.fun * b, b*a.der)
+
+    /(a::Dual, b::Dual) = Dual(a.fun / b.fun, (a.der - ((a.fun/b.fun)*b.der)) / b.fun)
+    /(a::Real, b::Dual) = Dual(a / b.fun, ((a/b.fun)*b.der) / b.fun)
+    /(a::Dual, b::Real) = Dual(a.fun / b, a.der / b)
+
+    ^(a::Dual, c::Integer) = Dual(a.fun^c, (c*(a.fun^(c-1))) * a.der)
+    ^(a::Dual, c::Real) = Dual(a.fun^c, (c*(a.fun^(c-1))) * a.der)
+
+    redondear(a::Dual) = Dual(round(a.fun), round(a.der))
+
+    convertir(a::Dual) = Dual(Float64(a.fun), round(a.der))
+
+    ==(a::Dual, b::Dual) = a.fun==b.fun && a.der==b.der
 
 end
