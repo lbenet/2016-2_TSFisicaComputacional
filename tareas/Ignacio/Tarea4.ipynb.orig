@@ -185,10 +185,26 @@
    ]
   },
   {
+   "cell_type": "markdown",
+   "metadata": {
+    "collapsed": false
+   },
+   "source": [
+    "Esto es en otro archivo\n",
+    "include <nombre.jl>\n",
+    "se debe poner using <modulo>"
+   ]
+  },
+  {
    "cell_type": "code",
    "execution_count": null,
    "metadata": {
+<<<<<<< HEAD
+    "collapsed": false,
+    "scrolled": true
+=======
     "collapsed": false
+>>>>>>> yuriyama_Tarea4
    },
    "outputs": [],
    "source": [
@@ -196,6 +212,13 @@
     "evaluada en x_0, y 'derivada' es la variable de la derivada en x_0\n",
     "...\n",
     "\"\"\"\n",
+<<<<<<< HEAD
+    "\n",
+    "immutable NumDual{T <: Real}\n",
+    "    funcion::T\n",
+    "    derivada::T\n",
+    "end"
+=======
     "type Dual{T<:Real} #<: Real\n",
     "    # código:\n",
     "    \n",
@@ -204,6 +227,9 @@
     "    \n",
     "end\n",
     "\n",
+    "#Dual(a, b) = Dual(promote(a,b)...)\n",
+    "#Dual(a) = Dual(a, zero(a))"
+>>>>>>> yuriyama_Tarea4
    ]
   },
   {
@@ -211,10 +237,25 @@
    "execution_count": null,
    "metadata": {
     "collapsed": false
+<<<<<<< HEAD
+=======
+   },
+   "outputs": [],
+   "source": [
+    "?promote"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+>>>>>>> yuriyama_Tarea4
    },
    "outputs": [],
    "source": [
     "# Definan un método que permita la promoción automática cuando no son del mismo tipo\n",
+<<<<<<< HEAD
     "# Aqui se define un método que garantiza que el dual de un número cumple lo requerido\n",
     "\n",
     "import Base.convert\n",
@@ -230,7 +271,24 @@
     "promote_rule{T<:Real, S<:Real}(::Type{NumDual{T}}, ::Type{S}) = \n",
     "    NumDual{(promote_type)(T,S)}\n",
     "\n",
-
+    "foo = NumDual(2,7.1)"
+=======
+    "Dual(a, b) = Dual(promote(a,b)...)"
+>>>>>>> yuriyama_Tarea4
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+<<<<<<< HEAD
+=======
+   },
+   "outputs": [],
+   "source": [
+    "# Aqui se define un método que garantiza que el dual de un número cumple lo requerido\n",
+    "Dual(a) = Dual(a, zero(a))"
    ]
   },
   {
@@ -241,10 +299,28 @@
    },
    "outputs": [],
    "source": [
+    "Dual(1.0, 1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+>>>>>>> yuriyama_Tarea4
+   },
+   "outputs": [],
+   "source": [
     "# Aqui se define la función `xdual`, que se usará para identificar la variable independiente\n",
     "# La función depende de x_0, y debe regresar el Dual apropiado a la variable independiente\n",
     "function xdual(x0)\n",
+<<<<<<< HEAD
+    "    NumDual(x0,1)\n",
+=======
+    "    # código\n",
+    "    \n",
     "    Dual(x0,1)\n",
+>>>>>>> yuriyama_Tarea4
     "end"
    ]
   },
@@ -252,6 +328,31 @@
    "cell_type": "code",
    "execution_count": null,
    "metadata": {
+<<<<<<< HEAD
+=======
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "xdual(7)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "Dual(7)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+>>>>>>> yuriyama_Tarea4
     "collapsed": false,
     "slideshow": {
      "slide_type": "subslide"
@@ -264,13 +365,31 @@
     "using Base.Test\n",
     "\n",
     "# Aqui vienen varios tests de cada una de las funciones que implementaron\n",
+<<<<<<< HEAD
     "# Para checar la construcción de duales, hagánlo verificando cada uno de los campos internos\n",
     "@test NumDual(5.,5).derivada == 5.\n",
     "@test NumDual(3).funcion == 3 && NumDual(3).derivada == 0\n",
     "@test NumDual(3.).funcion == 3. && NumDual(3.).derivada == 0"
-	"d2 = Dual(7)\n",
+=======
+    "# Para checar la construcción de duales, háganlo verificando cada uno de los campos internos\n",
+    "\n",
+    "d2 = Dual(7)\n",
+    "@test d2.fun == 7 && d2.der == 1\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "d2 = Dual(7)\n",
     "@test d2.fun == 7 && d2.der == 0\n",
     "#Correcto. No marca error"
+>>>>>>> yuriyama_Tarea4
    ]
   },
   {
@@ -330,6 +449,24 @@
     "\n",
     "# Aqui se implementan los métodos necesarios para cada función\n",
     "\n",
+<<<<<<< HEAD
+    "+(a::NumDual, b::NumDual) = NumDual(a.funcion + b.funcion, a.derivada + b.derivada) \n",
+    "+(a::Real, b::NumDual) = NumDual(a + b.funcion, b.derivada)\n",
+    "+(a::NumDual, b::Real) = NumDual(a.funcion + b, a.derivada)\n",
+    "-(a::NumDual, b::NumDual) = NumDual(a.funcion - b.funcion, a.derivada - b.derivada) \n",
+    "-(a::Real, b::NumDual) = NumDual(a - b.funcion, b.derivada)\n",
+    "-(a::NumDual, b::Real) = NumDual(a.funcion - b, a.derivada)\n",
+    "*(a::NumDual, b::NumDual) = NumDual(a.funcion * b.funcion, a.funcion*b.derivada + b.funcion*a.derivada) \n",
+    "*(a::Real, b::NumDual) = NumDual(a * b.funcion, a*b.derivada)\n",
+    "*(a::NumDual, b::Real) = NumDual(a.funcion * b, b*a.derivada)\n",
+    "/(a::NumDual, b::NumDual) = NumDual(a.funcion / b.funcion, (a.derivada - ((a.funcion/b.funcion)*b.derivada)) / b.funcion)\n",
+    "/(a::Real, b::NumDual) = NumDual(a / b.funcion, ((a/b.funcion)*b.derivada) / b.funcion) \n",
+    "/(a::NumDual, b::Real) = NumDual(a.funcion / b, a.derivada / b)\n",
+    "^(a::NumDual, b::Integer) = NumDual(a.funcion^b, (b*(a.funcion^(b-1))) * a.derivada)\n",
+    "^(a::NumDual, b::Real) = NumDual(a.funcion^b, (b*(a.funcion^(b-1))) * a.derivada)\n",
+    "==(a::NumDual, b::NumDual) = a.funcion==b.funcion && a.derivada==b.derivada\n",
+    "\n",
+=======
     "\n",
     "+(a::Dual, b::Dual) = Dual(a.fun + b.fun, a.der + b.der) \n",
     "+(a::Real, b::Dual) = Dual(a + b.fun, b.der)\n",
@@ -354,6 +491,7 @@
     "convertir(a::Dual) = Dual(Float64(a.fun), round(a.der))\n",
     "\n",
     "==(a::Dual, b::Dual) = a.fun==b.fun && a.der==b.der \n",
+>>>>>>> yuriyama_Tarea4
     "\n"
    ]
   },
@@ -361,20 +499,13 @@
    "cell_type": "code",
    "execution_count": null,
    "metadata": {
+<<<<<<< HEAD
+=======
     "collapsed": false
    },
    "outputs": [],
    "source": [
     "# Aqui se incluyen las pruebas necesarias\n",
-	"@test NumDual(2,2)+2 == NumDual(4,2)\n",
-    "\n",
-    "@test 2 + NumDual(2,2) == NumDual(4,2)\n",
-    "\n",
-    "@test 2*NumDual(2,0) == NumDual(2,0)*2\n",
-    "\n",
-    "@test 1/NumDual(2,0) == NumDual(1/2,0)\n",
-    "\n",
-    "@test NumDual(1,0)^2 == NumDual(1,0)"
     "d1 = Dual(2.0,3.0)\n",
     "d2 = Dual(2.1,3.0)"
    ]
@@ -383,6 +514,7 @@
    "cell_type": "code",
    "execution_count": null,
    "metadata": {
+>>>>>>> yuriyama_Tarea4
     "collapsed": false,
     "slideshow": {
      "slide_type": "subslide"
@@ -390,6 +522,18 @@
    },
    "outputs": [],
    "source": [
+<<<<<<< HEAD
+    "# Aqui se incluyen las pruebas necesarias\n",
+    "@test NumDual(2,2)+2 == NumDual(4,2)\n",
+    "\n",
+    "@test 2 + NumDual(2,2) == NumDual(4,2)\n",
+    "\n",
+    "@test 2*NumDual(2,0) == NumDual(2,0)*2\n",
+    "\n",
+    "@test 1/NumDual(2,0) == NumDual(1/2,0)\n",
+    "\n",
+    "@test NumDual(1,0)^2 == NumDual(1,0)"
+=======
     "@test d1 == d2 #Correcto, da error"
    ]
   },
@@ -549,6 +693,7 @@
    "source": [
     "@test d1^2 == Dual(4, 12)\n",
     "#Test correcto"
+>>>>>>> yuriyama_Tarea4
    ]
   },
   {
@@ -596,11 +741,18 @@
    "execution_count": null,
    "metadata": {
     "collapsed": false
+<<<<<<< HEAD
    },
    "outputs": [],
    "source": [
     "# Del resultado anterior, obtengan el valor de la derivada\n",
     "xdual(1),xdual(2)"
+=======
+   },
+   "outputs": [],
+   "source": [
+    "# Del resultado anterior, obtengan el valor de la derivada\n",
+    "print(xdual(1))"
    ]
   },
   {
@@ -611,7 +763,58 @@
    },
    "outputs": [],
    "source": [
+    "du1 = Dual(1.0, 1.0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "print(du1^3)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "du2 = Dual(1.0, 3.0)\n",
+    "println(du2*3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "du3 = Dual(3.0, 9.0)\n",
+    "println(du3-2)"
+>>>>>>> yuriyama_Tarea4
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+<<<<<<< HEAD
     "f_test(xdual(2))"
+=======
+    "du4 = Dual(1.0, 9.0)"
+>>>>>>> yuriyama_Tarea4
    ]
   },
   {
@@ -622,7 +825,12 @@
    },
    "outputs": [],
    "source": [
+<<<<<<< HEAD
     "f_test(xdual(3))"
+=======
+    "#Derivada de f_test en x0 = 1\n",
+    "println(du4.der)"
+>>>>>>> yuriyama_Tarea4
    ]
   },
   {
@@ -685,7 +893,178 @@
    "outputs": [],
    "source": [
     "# Evalúen `gtest` de manera que el resultado sea el exacto\n",
+<<<<<<< HEAD
     "gtest(xdual(1//1))\n"
+=======
+    "println(xdual(1.0))\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "f1 = Dual(1.0, 1.0)\n",
+    "\n",
+    "#Calculando x^2\n",
+    "println(f1^2)\n",
+    "\n",
+    "#Calculando x^3\n",
+    "println(f1^3)\n",
+    "\n",
+    "#Calculando 8(x)\n",
+    "println(f1*8)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "#Renombrando variables\n",
+    "f2 = Dual(1.0, 2.0)\n",
+    "f3 = Dual(1.0, 3.0)\n",
+    "f4 = Dual(8.0, 8.0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "#Calculando 3(x^2)\n",
+    "println(f2*3)\n",
+    "\n",
+    "#Calculando 7(x^3)\n",
+    "println(7*f3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "#Renombrando\n",
+    "f5 = Dual(3.0, 6.0)\n",
+    "f6 = Dual(7.0, 21.0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "#Calculando el numerador\n",
+    "println(f5-f4)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "f7 = Dual(-5.0, -2.0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "#Resultado del numerador\n",
+    "println(f7+5)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "f8 = Dual(0.0, -2.0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "#Calculando el denominador\n",
+    "println(f6-1)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "#Resultado del denominador\n",
+    "f9 = Dual(6.0, 21.0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "#Calculando f9/f10\n",
+    "println(f8/f9)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "#Resultado de g_test evaluado en x0 = 1\n",
+    "f10 = (f8/f9)\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": [
+    "\n"
+>>>>>>> yuriyama_Tarea4
    ]
   },
   {
