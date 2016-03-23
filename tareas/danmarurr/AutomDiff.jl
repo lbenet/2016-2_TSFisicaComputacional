@@ -20,11 +20,11 @@ module AD
     
     Dual(a, b) = Dual(promote(a, b) ...)
     # Aqui se define un método que garantiza que el dual de un número cumple lo requerido
-    Dual(a) = Dual(a, 0)
+    Dual(a) = Dual(a, zero(0))
     # Aqui se define la función `xdual`, que se usará para identificar la variable independiente
 
     function xdual(x0)
-        Dual(x0, 1)
+        Dual(x0, one(x0))
     end
 
     # Definiendo operaciones cuando los argumentos son Duales
