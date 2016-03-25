@@ -65,10 +65,10 @@ Vec_Func = [(:sin, :cos), (:cos, :(x -> -sin(x))), (:tan, :(x -> (sec(x))^2)), (
     (:sec, :(x -> sec(x)*tan(x))), (:csc, :(x -> -csc(x)*cot(x))), (:sinh, :cosh), (:cosh, :sinh), 
     (:tanh, :(x -> (sech(x))^2)), (:coth, :(x -> -(csch(x))^2)), (:asin, :(x -> 1/sqrt(1-x^2))), 
     (:acos, :(x -> -1/sqrt(1-x^2))), (:atan, :(x -> 1/(1+x^2))), (:acot, :(x -> -1/(1+x^2))),
-    (:asec, :(x -> 1/(sqrt(1-x^-2)*x^2))), (:acsc, :(x -> -1/(sqrt(1-x^-2)*x^2))), (:asinh, :(x -> 1/sqrt(1+x^2))),
+    (:asec, :(x -> 1/(sqrt(x^2-1)*x))), (:acsc, :(x -> -1/(sqrt(x^2-1)*x))), (:asinh, :(x -> 1/sqrt(1+x^2))),
     (:acosh, :(x -> 1/sqrt(x^2-1))), (:atanh, :(x -> 1/(1-x^2))), (:acoth, :(x -> 1/(1-x^2))),
-    (:asech, :(x -> 1/(x*sqrt(1-x^2)))), (:acsch, :(x -> 1/(x*sqrt(1-x^2)))), (:acsch, :(x -> -1/(x*sqrt(1+x^2)))),
-    (:sqrt, :(x -> 1/(2*sqrt(x)))), (:exp, :exp), (:cbrt, :(x -> 1/(3*x^(2/3))))]
+    (:asech, :(x -> 1/(x*sqrt(1-x^2)))), (:acsch, :(x -> -1/(x*sqrt(1+x^2)))), (:sqrt, :(x -> 1/(2*sqrt(x)))), (:exp, :exp),
+    (:cbrt, :(x -> 1/(3*x^(2/3))))]
 
 #Casos especiales: los logarítmos y a^x
 log(a::Dual) = Dual(log(a.fun), a.der/a.fun)
