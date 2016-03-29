@@ -1,4 +1,4 @@
-include("AutomDiff.jl")
+include("AutomDiff_V2.jl")
 using Base.Test
 using AD
 
