@@ -51,7 +51,7 @@ import Base: +, -, *, /, ^, ==
 /(a::Dual, b::Dual) = Dual(a.fun/b.fun, (a.der - (a.fun/b.fun)*b.der)/b.fun)
 /(b::Dual, a::Real) = Dual((b.fun)/a,(b.der)/a)
 
-^(a::Dual, b::Int) = Dual(a.fun^b,b*(a.fun^(b-1))*a.der)
+^(a::Dual, b::Integer) = Dual(a.fun^b,b*(a.fun^(b-1))*a.der)
 ^(a::Dual, b::Real) = Dual(a.fun^b,b*(a.fun^(b-1))*a.der)
 
 ==(a::Dual, b::Dual) = (a.fun == b.fun) && (a.der == b.der)
