@@ -1,5 +1,13 @@
 # Proyectos de fin de semestre
 
+**Fecha importantes:**
+
+Viernes 3 de junio: Envío de proyectos y presentaciones.
+
+Martes 7 de junio: Examen final (presentación de proyectos), a la 1 PM, en el Aula de Cómputo III.
+
+
+=====================
 
 ## Reglas
 
@@ -13,8 +21,9 @@
 
 - Los proyectos serán albergados en una cuenta de GitHub de alguno de los miembros del equipo. Es obligación comunicar el repositorio donde se encuentra el proyecto; fecha límite: martes 26 de abril.
 
-- Se deberá enviar un ipynb con todos los detalles del proyecto. En base a éste se puede basar la presentación oral, que a priori puede ser en un archivo independiente. El mismo sistema usado para el envío de tareas se usará para los proyectos, en este caso usando el subdirectorio "proys".
+- Al finalizar se deberá enviar un ipynb con todos los detalles del proyecto. En base a éste se puede basar la presentación oral, que a priori puede ser en un archivo independiente. El mismo sistema usado para el envío de tareas se usará para los proyectos, en este caso usando el subdirectorio "proys". Los proyectos deben estar documentados adecuadamente.
 
+=====================
 
 ## Temas del proyecto
 
@@ -40,18 +49,13 @@ Los temas que se sugieren a continuación involucran la integración de sistemas
 
 - Oscilaciones en sistemas biológicos: por ejemplo, modelos de dinámica poblacional, epidemiología o inmunología. Ver [5]?
 
+=====================
 
 ## Presentación del proyecto
 
 La presentación del proyecto constituye el examen final del curso (70% de la calificación), y consiste en un seminario de *máximo* 25 minutos y 5 para preguntas. Es necesario tener aceptadas 75% de las tareas.
 
-
-**Fecha importantes:**
-
-Viernes 3 de junio: Envío de proyectos y presentaciones.
-
-Martes 7 de junio: Examen final (presentación de proyectos), a la 1 PM, en el Aula de Cómputo III.
-
+=====================
 
 ## Referencias
 
