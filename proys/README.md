@@ -43,7 +43,7 @@ Los temas que se sugieren a continuación involucran la integración de sistemas
 
 ## Presentación del proyecto
 
-- La presentación del proyecto constituye el examen final del curso (70% de la calificación), y consiste en un seminario de *máximo* 25 minutos y 5 para preguntas. Es necesario tener aceptadas 75% de las tareas.
+La presentación del proyecto constituye el examen final del curso (70% de la calificación), y consiste en un seminario de *máximo* 25 minutos y 5 para preguntas. Es necesario tener aceptadas 75% de las tareas.
 
 
 **Fecha importantes:**
