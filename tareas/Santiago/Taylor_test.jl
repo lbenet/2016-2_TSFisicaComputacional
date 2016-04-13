@@ -6,7 +6,7 @@ using TS
 # Primero vamos a probar que nuestra estructura Taylor tiene solo espacio para 10 entradas. Esto se puede cambiar
 # muy rapido en el codigo cambiando solo la definicion de Taylor.
 
-@test Taylor([1,1,1]) == Taylor([1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,2,1])
+@test Taylor([1,1,1]) == Taylor([1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
 
 # Ahora corresponden las pruebas de operaciones aritmetica basica.
 @test Taylor([1,0]) + Taylor([0,1]) == Taylor([1,1])
