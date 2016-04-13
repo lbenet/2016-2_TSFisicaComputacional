@@ -139,16 +139,38 @@ log(a::Taylor, n::Integer) = log(prom(a,n))
 
 # Potencia
 function ^(a::Taylor, n::Integer)
-    ex = :($a)
-    k = 1;
-    while k < n
-        ex = :($ex * $a)
-        k += 1
+    if n != 0
+        ex = :($a)
+        k = 1;
+        while k < n
+            ex = :($ex * $a)
+            k += 1
+        end
+        return eval(ex)
+    else
+        return Taylor(ones(1))
     end
-    return eval(ex)
 end
 ^(a::Taylor, n::Number) = Taylor(exp(n*log(a)))
 
 # Seno
+import Base: sin,cos
+
+function sin(a::Taylor)
+    n = gradomax(a);
+    S = Taylor(zeros(n));
+    for k = 0:9
+        S += (-1)^k * a^(2*k+1) /factorial(2*k + 1);
+    end
+    return S
+end
 
 # Coseno
+function cos(a::Taylor)
+    n = gradomax(a);
+        C = Taylor(zeros(n))
+        for k = 0:9
+            C += (-1)^k * a^(2*k) / factorial(2*k);
+        end
+    return C 
+end
