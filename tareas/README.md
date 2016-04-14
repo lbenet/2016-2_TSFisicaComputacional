@@ -18,7 +18,7 @@
 |      Tarea 3       |    Lunes 29 de febrero   |    Martes 8 de marzo    |    Ya no se acepta     |
 |      Tarea 4       |      Lunes 7 de marzo    |    Martes 22 de marzo   |    Ya no se acepta     |
 |      Tarea 5       |      Lunes 14 de marzo   |    Martes 29 de marzo   |    Ya no se acepta     |
-|      Tarea 6       |      Lunes 28 de marzo   |    Martes 12 de abril   |    Aún se acepta       |
+|      Tarea 6       |      Lunes 28 de marzo   |    Martes 12 de abril   |    Ya no se acepta     |
 |      Tarea 7       |      Lunes 4 de abril    |    Lunes 18 de abril    |    Aún se acepta       |
 
 =====================
@@ -41,5 +41,3 @@ en su carpeta de tareas, propiamente contestado, en equipos de dos personas (má
 - Como tarea 6 deben subir el notebook [09-DerivadasSuperiores.ipynb](https://github.com/lbenet/2016-2_TSFisicaComputacional/blob/master/notas_clase/09-DerivadasSuperiores.ipynb) en su carpeta de tareas, propiamente contestado, con el mismo equipo que la tarea 4. La resolución completa de los ejercicios debe ser enviada como "Tarea6.ipynb".
 
 - Como tarea 7 deben subir el notebook [10_IntegracionTaylor.ipynb](https://github.com/lbenet/2016-2_TSFisicaComputacional/blob/master/notas_clase/10_IntegracionTaylor.ipynb) en su carpeta de tareas, propiamente contestado, con el mismo equipo que la tarea 6. La resolución completa de los ejercicios debe ser enviada como "Tarea7.ipynb".
-
-
