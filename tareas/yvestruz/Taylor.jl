@@ -72,21 +72,21 @@ end
 *(k::Number, a::Taylor) = Taylor(k*a.pol)
 
 # División
-function /(b::Real, a::Taylor)
+function /(b::Real, a::Taylor)  
     n = gradomax(a);
     r = Taylor(zeros(n));
     A = prom(a,r);
     s = 1; # índice desde donde empezamos
-    if A.pol[s] == 0 # checamos si el primer término no es nulo
+    while A.pol[s] == 0 # checamos si el primer término no es nulo
         s += 1;
     end
     r.pol[1] = b/A.pol[s];
-    for k = s:n-1
+    for k = (s+1):n
         suma = 0;
         for j = 0:k-1
-            suma += r.pol[j+1]*A.pol[k-j+1]
+            suma += r.pol[j+1]*A.pol[k-j]
         end
-        r.pol[k+1] = (-suma)/A.pol[s];
+        r.pol[k] = (-suma)/A.pol[s];
     end
     return r
 end
