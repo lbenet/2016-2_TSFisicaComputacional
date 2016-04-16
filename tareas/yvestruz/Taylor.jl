@@ -72,27 +72,37 @@ end
 *(k::Number, a::Taylor) = Taylor(k*a.pol)
 
 # División
-function /(b::Real, a::Taylor)  
+function /(A::Taylor, B::Taylor)
+    a = prom(A,B);
+    b = prom(B,A);
+    
     n = gradomax(a);
+
     r = Taylor(zeros(n));
-    A = prom(a,r);
     s = 1; # índice desde donde empezamos
-    while A.pol[s] == 0 # checamos si el primer término no es nulo
+
+    while b.pol[s] == 0 # checamos si el primer término no es nulo
         s += 1;
     end
-    r.pol[1] = b/A.pol[s];
+
+    r.pol[1] = a.pol[s]/b.pol[s];
+
     for k = (s+1):n
         suma = 0;
+        
         for j = 0:k-1
-            suma += r.pol[j+1]*A.pol[k-j]
+            suma += r.pol[j+1]*b.pol[k-j]
         end
-        r.pol[k] = (-suma)/A.pol[s];
+
+        r.pol[k-s+1] = (a.pol[k]-suma)/b.pol[s];
     end
     return r
 end
-/(a::Taylor, b::Taylor) = a*(1/b)
-/(a::Taylor, k::Number) = Taylor(a.pol/k)
+/(a::Taylor, k::Number) = Taylor(a.pol/k);
 /(k::Number, a::Taylor) = Taylor(k)/a
+div_ex(a::Taylor, b::Taylor, n::Integer) = prom(a,n)/prom(b,n)
+div_ex(a::Taylor, k::Number, n::Integer) = prom(a,n)/k
+div_ex(k::Number, a::Taylor, n::Integer) = Taylor(k)/prom(a,n)
 
 # Igualdad
 ==(a::Taylor, b::Taylor) = a.pol == b.pol
