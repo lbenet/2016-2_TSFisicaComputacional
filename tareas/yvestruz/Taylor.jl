@@ -1,4 +1,4 @@
-#=
+﻿#=
 Este módulo contiene las bases para la diferenciación automática en Julia. Permite calcular de manera exacta la derivada de órdenes superiores utilizando el álgebra de polinomios truncados de Taylor, introduciendo un nuevo tipo de estructura: Taylor.
 
 Autores:
@@ -62,6 +62,14 @@ end
 
 
 import Base: +, -, *, ^, /, ==
+
+# Igualdad
+function ==(a::Taylor, b::Taylor)
+    A=prom(a,b)
+    B=prom(b,a)
+    return A.pol == B.pol
+end
+
 # Suma
 +(a::Taylor, b::Taylor) = Taylor(prom(a,b).pol+prom(b,a).pol)
 +(a::Taylor, k::Number) = a + Taylor(k)
@@ -124,12 +132,6 @@ div_ex(a::Taylor, b::Taylor, n::Integer) = prom(a,n)/prom(b,n)
 div_ex(a::Taylor, k::Number, n::Integer) = prom(a,n)/k
 div_ex(k::Number, a::Taylor, n::Integer) = Taylor(k)/prom(a,n)
 
-# Igualdad
-function ==(a::Taylor, b::Taylor)
-    A=prom(a,b)
-    B=prom(b,a)
-    return A.pol == B.pol
-end
 
 # # # Funciones
 
@@ -157,9 +159,12 @@ function log(a::Taylor)
     L = Taylor(zeros(n));
     L.pol[1] = log(a.pol[1]);
     s = 1; # índice desde donde empezamos
-    while s<=n && a.pol[s] == 0
+    
+    #hallar el índice del primer término no nulo o hacer s=n
+    while s<=n && a.pol[s] == 0 
         s += 1
     end    
+
     for k = (s+1):n
         suma = 0;        
         for j = (s+1): k
@@ -171,7 +176,7 @@ function log(a::Taylor)
 end
 log(a::Taylor, n::Integer) = log(prom(a,n))
 
-# Potencia
+# Potencia de un Número Entero
 function ^(a::Taylor, n::Integer)
     if n != 0
         ex = :($a)
@@ -185,6 +190,8 @@ function ^(a::Taylor, n::Integer)
         return Taylor(ones(1))
     end
 end
+
+#Potencia de un Número Cualquiera
 ^(a::Taylor, n::Number) = exp(n*log(a))
 
 # Seno
