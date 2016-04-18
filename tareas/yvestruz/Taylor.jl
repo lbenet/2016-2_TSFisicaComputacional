@@ -41,19 +41,6 @@ function prom(a::Taylor,b::Taylor = a)
 end
 prom(a::Taylor,n::Integer) = prom(a,Taylor(zeros(n)))
 
-#Evaluación
-"""Función que evalúa un Taylor en el punto x0 (debe ser cercano al punto alrededor del que se construye el polinomio de Taylor)
-"""
-function evaluar(a::Taylor,x0)
-    n = gradomax(a);
-    ex = :(0)
-    
-    for k = 1:n
-        ex = :($ex + $a.pol[$k]*$x0^$(k-1))
-    end
-    return eval(ex)
-end
-
 import Base: +, -, *, ^, /, ==
 # Suma
 +(a::Taylor, b::Taylor) = Taylor(prom(a,b).pol+prom(b,a).pol)
@@ -85,27 +72,37 @@ end
 *(k::Number, a::Taylor) = Taylor(k*a.pol)
 
 # División
-function /(b::Real, a::Taylor)
+function /(A::Taylor, B::Taylor)
+    a = prom(A,B);
+    b = prom(B,A);
+    
     n = gradomax(a);
+
     r = Taylor(zeros(n));
-    A = prom(a,r);
     s = 1; # índice desde donde empezamos
-    if A.pol[s] == 0 # checamos si el primer término no es nulo
+
+    while b.pol[s] == 0 # checamos si el primer término no es nulo
         s += 1;
     end
-    r.pol[1] = b/A.pol[s];
-    for k = s:n-1
+
+    r.pol[1] = a.pol[s]/b.pol[s];
+
+    for k = (s+1):n
         suma = 0;
+        
         for j = 0:k-1
-            suma += r.pol[j+1]*A.pol[k-j+1]
+            suma += r.pol[j+1]*b.pol[k-j]
         end
-        r.pol[k+1] = (-suma)/A.pol[s];
+
+        r.pol[k-s+1] = (a.pol[k]-suma)/b.pol[s];
     end
     return r
 end
-/(a::Taylor, b::Taylor) = a*(1/b)
-/(a::Taylor, k::Number) = Taylor(a.pol/k)
+/(a::Taylor, k::Number) = Taylor(a.pol/k);
 /(k::Number, a::Taylor) = Taylor(k)/a
+div_ex(a::Taylor, b::Taylor, n::Integer) = prom(a,n)/prom(b,n)
+div_ex(a::Taylor, k::Number, n::Integer) = prom(a,n)/k
+div_ex(k::Number, a::Taylor, n::Integer) = Taylor(k)/prom(a,n)
 
 # Igualdad
 ==(a::Taylor, b::Taylor) = a.pol == b.pol
@@ -152,16 +149,38 @@ log(a::Taylor, n::Integer) = log(prom(a,n))
 
 # Potencia
 function ^(a::Taylor, n::Integer)
-    ex = :($a)
-    k = 1;
-    while k < n
-        ex = :($ex * $a)
-        k += 1
+    if n != 0
+        ex = :($a)
+        k = 1;
+        while k < n
+            ex = :($ex * $a)
+            k += 1
+        end
+        return eval(ex)
+    else
+        return Taylor(ones(1))
     end
-    return eval(ex)
 end
 ^(a::Taylor, n::Number) = Taylor(exp(n*log(a)))
 
 # Seno
+import Base: sin,cos
+
+function sin(a::Taylor)
+    n = gradomax(a);
+    S = Taylor(zeros(n));
+    for k = 0:9
+        S += (-1)^k * a^(2*k+1) /factorial(2*k + 1);
+    end
+    return S
+end
 
 # Coseno
+function cos(a::Taylor)
+    n = gradomax(a);
+        C = Taylor(zeros(n))
+        for k = 0:9
+            C += (-1)^k * a^(2*k) / factorial(2*k);
+        end
+    return C 
+end
