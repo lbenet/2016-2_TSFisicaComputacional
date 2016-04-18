@@ -1,4 +1,4 @@
-#=
+﻿#=
 Este módulo contiene las bases para la diferenciación automática en Julia. Permite calcular de manera exacta la derivada de órdenes superiores utilizando el álgebra de polinomios truncados de Taylor, introduciendo un nuevo tipo de estructura: Taylor.
 
 Autores:
@@ -29,19 +29,47 @@ Taylor(a::Number) = Taylor([a])
 Taylor(a::Complex) = Taylor ([a])
 
 # Grado máximo
+""""
+Regresa la longitud del array más grande entre dos polinomios. grado del polinomio x = gradomax(x)-1 
+"""
 function gradomax(a::Taylor,b::Taylor)
     return max(length(a.pol),length(b.pol))
 end
 gradomax(a::Taylor) = length(a.pol)
 
 # Promoción
+"""prom(a::Taylor,b::Taylor = a ) 
+función que promueve el primer polinomio a al grado del segundo b si este es mayor. De no se así regresa a.
+"""
 function prom(a::Taylor,b::Taylor = a)
     q = [a.pol; fill(0,gradomax(a,b)-gradomax(a))]
     return Taylor(q)
 end
 prom(a::Taylor,n::Integer) = prom(a,Taylor(zeros(n)))
 
+#evaluación
+"""Función que evalúa un Taylor en el punto x0 (debe ser cercano al punto alrededor del que se construye el polinomio de Taylor)
+"""
+function evaluar(a::Taylor,x0::Number)
+    n = gradomax(a);
+    ex = :(0)
+    
+    for k = 1:n
+        ex = :($ex + $a.pol[$k]*$x0^$(k-1))
+    end
+    return eval(ex)
+end
+
+
 import Base: +, -, *, ^, /, ==
+
+# Igualdad
+function ==(a::Taylor, b::Taylor)
+    A=prom(a,b)
+    B=prom(b,a)
+    return A.pol == B.pol
+end
+
 # Suma
 +(a::Taylor, b::Taylor) = Taylor(prom(a,b).pol+prom(b,a).pol)
 +(a::Taylor, k::Number) = a + Taylor(k)
@@ -104,8 +132,6 @@ div_ex(a::Taylor, b::Taylor, n::Integer) = prom(a,n)/prom(b,n)
 div_ex(a::Taylor, k::Number, n::Integer) = prom(a,n)/k
 div_ex(k::Number, a::Taylor, n::Integer) = Taylor(k)/prom(a,n)
 
-# Igualdad
-==(a::Taylor, b::Taylor) = a.pol == b.pol
 
 # # # Funciones
 
@@ -133,9 +159,12 @@ function log(a::Taylor)
     L = Taylor(zeros(n));
     L.pol[1] = log(a.pol[1]);
     s = 1; # índice desde donde empezamos
-    while a.pol[s] == 0
+    
+    #hallar el índice del primer término no nulo o hacer s=n
+    while s<=n && a.pol[s] == 0 
         s += 1
     end    
+
     for k = (s+1):n
         suma = 0;        
         for j = (s+1): k
@@ -147,7 +176,7 @@ function log(a::Taylor)
 end
 log(a::Taylor, n::Integer) = log(prom(a,n))
 
-# Potencia
+# Potencia de un Número Entero
 function ^(a::Taylor, n::Integer)
     if n != 0
         ex = :($a)
@@ -161,7 +190,9 @@ function ^(a::Taylor, n::Integer)
         return Taylor(ones(1))
     end
 end
-^(a::Taylor, n::Number) = Taylor(exp(n*log(a)))
+
+#Potencia de un Número Cualquiera
+^(a::Taylor, n::Number) = exp(n*log(a))
 
 # Seno
 import Base: sin,cos
@@ -183,4 +214,7 @@ function cos(a::Taylor)
             C += (-1)^k * a^(2*k) / factorial(2*k);
         end
     return C 
+end
+
+
 end
