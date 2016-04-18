@@ -223,7 +223,7 @@ function ^(a::Taylor,ex::Integer)
         return error("No se puede exponenciar la serie negativamente")
     end
     if a.gr == 0
-        return Taylor(0*a.taylor_vec[1])
+        return Taylor(a.taylor_vec[1]^ex)
     end
     # Ahora encontramos donde empieza el arreglo que se está exponenciando,
     # análogo a la división.
@@ -252,7 +252,7 @@ end
 
 function ^(a::Taylor,ex::Number)
     if a.gr == 0
-        return Taylor(0*a.taylor_vec[1])
+        return Taylor(a.taylor_vec[1]^ex)
     end
     # Ahora encontramos donde empieza el arreglo que se está exponenciando,
     # análogo a la división.
