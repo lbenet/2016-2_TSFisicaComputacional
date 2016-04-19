@@ -194,6 +194,17 @@ function *(a::Taylor, b::Taylor)
             
 end
 
+function *{T<:Number}(f::Taylor, α::T)
+    h = Taylor(zeros(typeof(promote(α, f.coef[1])[1]), f.order))
+    
+    for k in 1:f.order
+        h.coef[k] = α * f.coef[k]        
+    end
+    return h
+            
+end
+*{T<:Number}(α::T, f::Taylor) = *(f, α)
+
 function ==(a::Taylor, b::Taylor)
     f,g = upgrade(a,b)
     r = true
