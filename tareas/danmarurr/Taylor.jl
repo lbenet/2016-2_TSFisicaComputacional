@@ -208,42 +208,6 @@ end
 
 # *************** FUNCIONES ESPECIALES **********************
 
-function ^(a::Taylor, b::Int)
-    h = Taylor((a.order - 1)* b + 1) #Creamos el nuevo Taylor 
-    P, g = upgrade(h, a) #Hacemos que a y h tengan el mismo orden
-    r = 0
-    for i in 1:a.order #Verificamos que el Taylor proporcionado sea distinto de cero
-        if g.coef[i] != 0
-            r = i
-            break
-        end
-    end
-    @assert r != 0 "Necesitamos un polinomio distinto de cero"
-    #@show a
-    P.coef[1] = g.coef[1]^b
-    
-    
-    for k in 2:h.order
-        suma_1 = 0
-        suma_2 = 0
-
-        for j in 1:(k-1)
-            g_j = g.coef[k + 1 - j]
-            P_j = P.coef[j]
-            suma_1 += (k - j)*g_j*P_j
-            
-        end
-
-        for j in 2:(k - 1)
-            g_j = g.coef[j]
-            P_q = P.coef[k + 1 - j]
-            suma_2 += (k - j)*g_j*P_q
-        end
-        P.coef[k] = (b*suma_1 - suma_2)/((k - 1)*g.coef[1])
-    end
-    
-    return P
-end   
 
 function log(g::Taylor)
     L = Taylor(g.order)
@@ -327,6 +291,8 @@ function sin(f::Taylor)
     ex = exp(t1)
     return imag(ex)
 end
+
+^{T<:Number}(a::Taylor, n::T) = exp(n*log(a))
 
 
 end
