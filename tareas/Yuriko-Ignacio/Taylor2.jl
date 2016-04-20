@@ -1,10 +1,14 @@
+module Taylor2
+
+import Base: length, zero, promote_rule, promote, +, -, *, /, ==, ^
+
 type Taylor{T<:Number}
     
     coeficientes :: Array{T,1}
-    orden :: T
+    orden :: Int
     
     #Constructor interno
-    function Taylor(coeficientes::Array{T,1}, orden::T)
+    function Taylor(coeficientes::Array{T,1}, orden::Int)
         
         longitud_coeficientes= length(coeficientes)
         orden = max(orden, longitud_coeficientes-1)
@@ -18,12 +22,11 @@ type Taylor{T<:Number}
 end
 
 #Constructor externo
-Taylor{T<:Number}(x::Taylor{T}, orden::Integer) = Taylor{T}(x.coeficientes, orden)
-#Taylor{T<:Number}(x::Taylor{T}) = Taylor{T}(x.coeficientes, x.orden)
+Taylor{T<:Number}(x::Taylor{T}, orden::Int) = Taylor{T}(x.coeficientes, orden)
 Taylor{T<:Number}(x::Taylor{T}) = x
-Taylor{T<:Number}(coeficientes::Array{T,1}, orden::Integer) = Taylor{T}(coeficientes, orden)
+Taylor{T<:Number}(coeficientes::Array{T,1}, orden::Int) = Taylor{T}(coeficientes, orden)
 Taylor{T<:Number}(coeficientes::Array{T,1}) = Taylor{T}(coeficientes, length(coeficientes)-1)
-Taylor{T<:Number}(x::T, orden::Integer) = Taylor{T}([x], orden)
+Taylor{T<:Number}(x::T, orden::Int) = Taylor{T}([x], orden)
 Taylor{T<:Number}(x::T) = Taylor{T}([x], 0)
 
 #Tipo, longitud
@@ -41,34 +44,31 @@ promote_rule{T<:Number, S<:Number}(::Type{Array{S,1}}, ::Type{Taylor{T}}) = Tayl
 promote_rule{T<:Number, S<:Number}(::Type{Taylor{T}}, ::Type{S}) = Taylor{promote_type(T, S)}
 promote_rule{T<:Number, S<:Number}(::Type{S}, ::Type{Taylor{T}}) = Taylor{promote_type(T, S)}
 
-# #Funcion auxiliar
-function firstnonzero{T<:Number}(a::Taylor{T})
-    orden = a.orden
-    nonzero = orden+1
-    z = zero(T)
+#Funcion auxiliar
+function primer_no_cero{T<:Number}(a::Taylor{T})
+    no_cero::Int = a.order+1
     for i = 1:orden+1
         if a.coeficientes[i] != z
-            nonzero = i-1
+            no_cero= i-1
             break
         end
     end
-    nonzero
+    no_cero
 end
-function fixshape{T<:Number, S<:Number}(a::Taylor{T}, b::Taylor{S})
+
+function arreglar_forma{T<:Number, S<:Number}(a::Taylor{T}, b::Taylor{S})
     orden = max(a.orden, b.orden)
     a1, b1 = promote(a, b)
     return Taylor(a1, orden), Taylor(b1, orden), orden
 end
 
 #Zero y uno
-zero{T<:Number}(a::Taylor{T}) = Taylor(zero(T), a.orden)
-one{T<:Number}(a::Taylor{T}) = Taylor(one(T), a.orden)
-
-import Base: +, -, *, /, ==
+zero{T<:Number}(a::Taylor{T}) = Taylor1(zero(T), a.orden)
+one{T<:Number}(a::Taylor{T}) = Taylor1(one(T), a.orden)
 
 #Igualdad
 function ==(a::Taylor, b::Taylor)
-    a1, b1, orden = fixshape(a, b)
+    a1, b1, orden = arreglar_forma(a, b)
     return a1.coeficientes == b1.coeficientes
 end
 ==(a::Taylor, b::Number) = ==(a, Taylor(b, a.orden))
@@ -78,7 +78,7 @@ end
 for f in (:+, :-)
     @eval begin
         function ($f)(a::Taylor, b::Taylor)
-            a1, b1, orden = fixshape(a, b)
+            a1, b1, orden = arreglar_forma(a, b)
             v = ($f)(a1.coeficientes, b1.coeficientes)
             return Taylor(v, orden)
         end
@@ -90,7 +90,7 @@ end
 
 #Multiplicacion
 function *(a::Taylor, b::Taylor)
-    a1, b1, orden = fixshape(a, b)
+    a1, b1, orden = arreglar_forma(a, b)
     T = eltype(a1)
     coeficientes = zeros(T,orden+1)
     coeficientes[1] = a1.coeficientes[1] * b1.coeficientes[1]
@@ -113,7 +113,7 @@ end
 
 #Division
 function /(a::Taylor, b::Taylor)
-    a1, b1, orden = fixshape(a, b)
+    a1, b1, orden = arreglar_forma(a, b)
     ordLHopital, cLHopital = divlhopital(a1, b1) # L'Hôpital orden y coeficiente
     T = typeof(cLHopital)
     v1 = convert(Array{T,1}, a1.coeficientes)
@@ -139,8 +139,8 @@ end
 #Logaritmo
 function log(a::Taylor)
     orden = a.orden
-    l0nz = firstnonzero(a)
-    if firstnonzero(a)>0
+    l0nz = primer_no_cero(a)
+    if primer_no_cero(a)>0
         error("No es posible expander log alrededor de 0.\n")
     end
     aux = log( a.coeficientes[1] )
@@ -153,6 +153,7 @@ function log(a::Taylor)
     end
     Taylor( coeficientes, orden )
 end
+
 #Coeficientes homogeneos para logaritmo
 function logHomogcoef{T<:Number}(kcoef::Integer, ac::Array{T,1}, coeficientes::Array{T,1})
   coefhomog = zero(T)
@@ -208,6 +209,7 @@ function sincos(a::Taylor, fun::String)
         return Taylor( coscoeficientes, orden )
     end
 end
+
 #Coeficientes homogeneos para cos y sin
 function sincosHomogcoef{T<:Number}(kcoef::Integer, ac::Array{T,1}, 
         sincoeficientes::Array{T,1}, coscoeficientes::Array{T,1})
@@ -221,4 +223,7 @@ function sincosHomogcoef{T<:Number}(kcoef::Integer, ac::Array{T,1},
     sincoefhom = sincoefhom/kcoef
     coscoefhom = coscoefhom/kcoef
     return sincoefhom, coscoefhom
+end
+
+#Integracion
 end
