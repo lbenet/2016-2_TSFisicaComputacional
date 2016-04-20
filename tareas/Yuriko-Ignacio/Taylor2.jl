@@ -191,7 +191,7 @@ end
 #Sin y Cos
 sin(a::Taylor) = sincos(a, "sin")
 cos(a::Taylor) = sincos(a, "cos")
-function sincos(a::Taylor, fun::String)
+function sincos(a::Taylor, fun::AbstractString)
     orden = a.orden
     aux = sin( a.coeficientes[1] )
     T = typeof(aux)
