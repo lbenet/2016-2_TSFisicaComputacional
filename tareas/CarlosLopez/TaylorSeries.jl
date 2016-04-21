@@ -82,27 +82,56 @@ function *(A::Taylor,B::Taylor)
     Taylor(a)
 end
 *(x::Taylor,y::Number)=x*Taylor(y)
-*(y::Number,x::Taylor)=x*Taylor(y) 
+*(y::Bool,x::Taylor)=x*Taylor(y)
+*(y::Number,x::Taylor)=x*Taylor(y)
 
-function /(A::Taylor,B::Taylor)
-    a=zeros(Number,max(length(A.coffs),length(B.coffs)))
-    a[1]=A.coffs[1]/B.coffs[1]
-    for k=2:length(a)
-        for i=1:k-1
-            if(k-i+1<=length(B.coffs))
-                a[k]+=a[i]*B.coffs[k-i+1]
-            end
+function degree(A::Taylor)
+    l=length(A.coffs)
+    for i=0:l-1
+        if(A.coffs[l]!=0)
+            break
         end
-        if(k<=length(A.coffs))
-            a[k]=A.coffs[k]-a[k]
-        end
-        if(B.coffs[1]!=0)
-            a[k]=a[k]/B.coffs[1]
-        else
-            error("division by zero")
-        end
+        l-=1
     end
-    Taylor(a)
+    l-1
+end
+
+function shift(A::Taylor,d=1)
+    if(d>0)
+        a=zeros(Number,length(A.coffs)+d)
+        for i=1:length(A.coffs)
+            a[i+d]=A.coffs[i]
+        end
+        Taylor(a) 
+    elseif(d<0 && length(A.coffs)+d>0)
+        a=zeros(Number,length(A.coffs)+d)
+        for i=1:length(a)
+            a[i]=A.coffs[i-d]
+        end
+        Taylor(a)
+    elseif(length(A.coffs)+d<1)
+        Taylor(0)
+    elseif(d==0)
+        A
+    end
+end
+    
+function /(A::Taylor,B::Taylor)
+    if(degree(B)==-1)
+        error("division by zero")
+    end
+    if(degree(A)<degree(B))
+        Taylor(0)
+    else
+        q=Taylor(zeros(Number,degree(A)-degree(B)+1))
+        while(degree(A)>=degree(B))
+            b=shift(B,degree(A)-degree(B))
+            q.coffs[degree(A)-degree(B)+1]=A.coffs[degree(A)+1]/b.coffs[degree(b)+1]
+            b=b*q.coffs[degree(A)-degree(B)+1]
+            A=A-b
+        end
+        q
+    end
 end
 /(x::Taylor,y::Number)=x/Taylor(y)
 /(y::Number,x::Taylor)=x/Taylor(y)
@@ -158,9 +187,18 @@ function log(A::Taylor)
     r[1]=log(A.coffs[1])
     Taylor(r)
 end
-^(A::Taylor,x::Integer)=exp(x*log(A))
-^(A::Taylor,x::Real)=exp(x*log(A))
+function ^(A::Taylor,x::Integer)
+    if(x==0)
+        Taylor(1)
+    elseif(x>0)
+        shift(A,x-1)
+    else
+        shift(A,x)
+    end
+end
 ^(A::Taylor,x::Rational)=exp(x*log(A))
+^(A::Taylor,x::Real)=exp(x*log(A))
+
 function sin(A::Taylor)
     a=zeros(Number,length(A.coffs))
     r=Taylor(a)
