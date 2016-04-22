@@ -26,7 +26,7 @@ end
 
 # Consistencia
 Taylor(a::Number) = Taylor([a])
-Taylor(a::Complex) = Taylor([a])
+Taylor(a::Complex) = Taylor ([a])
 
 # Grado máximo
 """"
