@@ -7,23 +7,23 @@ module TS
 
 	export Taylor
 """
-Definición de polinomios de Taylor, consta de dos partes: 'taylor_vec' es un Array{T<:Number} que contiene los 
-coeficientes ordenados del polinomio y 'gr' es el grado del polinomio de tal forma que 
-Taylor{Number}([a?,a?,a?,..,a_n],m) representa el polinomio a? + a?x + a?x² + ··· + a?x? + ... + 0x?
+Definiciï¿½n de polinomios de Taylor, consta de dos partes: 'taylor_vec' es un Array{T<:Number} que contiene los
+coeficientes ordenados del polinomio y 'gr' es el grado del polinomio de tal forma que
+Taylor{Number}([a?,a?,a?,..,a_n],m) representa el polinomio a? + a?x + a?xï¿½ + ï¿½ï¿½ï¿½ + a?x? + ... + 0x?
 ...
 """
 type Taylor{T<:Number}
-    # Aquí se declara taylor_vec que es un Array unidimensional de tipo T.
+    # Aquï¿½ se declara taylor_vec que es un Array unidimensional de tipo T.
     taylor_vec::Array{T, 1}
-    # gr es un entero que corresponde al grado máximo de la serie.
+    # gr es un entero que corresponde al grado mï¿½ximo de la serie.
     gr :: Int
-    
-    # Aquí hay un constructor interno que lo que va a hacer es tomar el
-    # arreglo taylor_vec y ver si tiene un tamaño mayor o menor que gr
+
+    # Aquï¿½ hay un constructor interno que lo que va a hacer es tomar el
+    # arreglo taylor_vec y ver si tiene un tamaï¿½o mayor o menor que gr
     # que es donde se trunca la serie.
     function Taylor(taylor_vec::Array{T, 1},gr::Int)
         if length(taylor_vec) < gr + 1
-            # Si hay menos de gr entradas, se utiliza vcat para meter ceros 
+            # Si hay menos de gr entradas, se utiliza vcat para meter ceros
             # restantes en taylor_vec y luego se reconstruye.
             taylor_vec = vcat(taylor_vec, zeros(T, gr + 1 - length(taylor_vec)))
             new(taylor_vec,gr)
@@ -41,12 +41,12 @@ Taylor{T<:Number}(taylor_vec::Array{T, 1},gr::Int) = Taylor{T}(taylor_vec,gr)
 # Si no queremos especificar el grado de los Taylor:
 Taylor{T<:Number}(a::Array{T,1}) = Taylor(a, length(a)-1)
 
-# Adicionalmente se declara un método para tener Taylor para un escalar.
+# Adicionalmente se declara un mï¿½todo para tener Taylor para un escalar.
 Taylor{T<:Number}(a::T) = Taylor([a])
 Taylor{T<:Number}(a::T, gr::Int) = Taylor([a],gr)
 
-# Método para la promoción de dos Taylors y así poder actuar
-# estructuras aritméticas:
+# Mï¿½todo para la promociï¿½n de dos Taylors y asï¿½ poder actuar
+# estructuras aritmï¿½ticas:
 function promote(a::Taylor, b::Taylor)
     gr = maximum([a.gr, b.gr])
     return Taylor(a.taylor_vec,gr), Taylor(b.taylor_vec, gr)
@@ -68,7 +68,7 @@ end
 -(a::Taylor, b::Number) = a - Taylor(b)
 -(a::Number, b::Taylor) = Taylor(a) - b
 
-# Los operadores unitarios y la comparación.
+# Los operadores unitarios y la comparaciï¿½n.
 +(a::Taylor) = a
 -(a::Taylor) = Taylor(-a.taylor_vec,a.gr)
 function ==(a::Taylor, b::Taylor)
@@ -76,40 +76,40 @@ function ==(a::Taylor, b::Taylor)
     return a.taylor_vec == b.taylor_vec
 end
 
-# La mutiplicación se implementa usando dos for's. Primero se extienden
-# Los arreglos porque la mutiplicación de un polinomio de grado a.gr por
+# La mutiplicaciï¿½n se implementa usando dos for's. Primero se extienden
+# Los arreglos porque la mutiplicaciï¿½n de un polinomio de grado a.gr por
 # uno de grado b.gr es un polinomio de grado a.gr + b.gr
-# Una vez hecha la extensión, el primero for que va
-# desde 1, length(a.taylor_vec) construye el arreglo entero de  
-# elementos. El segundo for anidado es la suma que se da en la teoría
-# de arriba. Sólo hay que tener cuidado porque los índices empiezan en
-# uno y no en cero como en la teoría.
+# Una vez hecha la extensiï¿½n, el primero for que va
+# desde 1, length(a.taylor_vec) construye el arreglo entero de
+# elementos. El segundo for anidado es la suma que se da en la teorï¿½a
+# de arriba. Sï¿½lo hay que tener cuidado porque los ï¿½ndices empiezan en
+# uno y no en cero como en la teorï¿½a.
 function *(a::Taylor, b::Taylor)
     a, b = Taylor(a.taylor_vec,a.gr + b.gr), Taylor(b.taylor_vec, a.gr + b.gr)
-    return Taylor([sum([a.taylor_vec[i]*b.taylor_vec[k-i+1] 
+    return Taylor([sum([a.taylor_vec[i]*b.taylor_vec[k-i+1]
             for i in range(1,k)]) for k in range(1,a.gr+1)],a.gr)
 end
 *(a::Taylor, b::Number) = a*Taylor(b)
 *(a::Number, b::Taylor) = Taylor(a)*b
 
-# La división resulta ser un poco más complicada:
+# La divisiï¿½n resulta ser un poco mï¿½s complicada:
 function /(a::Taylor, b::Taylor)
-    # Lo primero que se hace es ver el orden de la división:
+    # Lo primero que se hace es ver el orden de la divisiï¿½n:
     m = a.gr - b.gr
     # Si m es negativo se avienta un error.
     if m < 0
-        return error("Se está dividiendo un polinomio de orden k entre otro con orden mayor a k.")
+        return error("Se estï¿½ dividiendo un polinomio de orden k entre otro con orden mayor a k.")
     end
-    # Ahora vamos a promover los Taylor a un mismo tamaño:
+    # Ahora vamos a promover los Taylor a un mismo tamaï¿½o:
     a, b = promote(a,b)
-    # Se inicializa un arreglo lleno de ceros enteros. Este arreglo después se
-    # va a cortar al tamaño m +1.
+    # Se inicializa un arreglo lleno de ceros enteros. Este arreglo despuï¿½s se
+    # va a cortar al tamaï¿½o m +1.
     div_vec = zeros(Int, a.gr+1)
     # Si el primer elemento de b es cero, nuestro algoritmo, tal cual como
-    # está escrito no funciona. Debe empezar con el primer par a.taylor_vec[i]
+    # estï¿½ escrito no funciona. Debe empezar con el primer par a.taylor_vec[i]
     # b.taylor_vec[i] con b.taylor_vec[i] distinto de cero. Esto se hace con
-    # un loop sobre los elementos de b. j va a ser un contador que nos diga 
-    # dónde es el coeficiente distinto de cero.
+    # un loop sobre los elementos de b. j va a ser un contador que nos diga
+    # dï¿½nde es el coeficiente distinto de cero.
     j = 1
     for i in range(1,length(b.taylor_vec))
         if b.taylor_vec[i] != 0
@@ -123,20 +123,20 @@ function /(a::Taylor, b::Taylor)
         end
     end
     # Habiendo obtenido la j que es donde el divisor empieza a ser distinto de cero,
-    # debemos comprobar que todos los coeficientes de a anteriores a j sean cero. De 
-    # otra manera tendríamos una división de un término x^k/x^j con k<j, lo cual no
-    # tiene una expansión en Taylor.
+    # debemos comprobar que todos los coeficientes de a anteriores a j sean cero. De
+    # otra manera tendrï¿½amos una divisiï¿½n de un tï¿½rmino x^k/x^j con k<j, lo cual no
+    # tiene una expansiï¿½n en Taylor.
     for i in range(1,j-1)
         if a.taylor_vec[i] != 0
-            return error("Polinomio con polo en la expansión de Taylor.")
+            return error("Polinomio con polo en la expansiï¿½n de Taylor.")
         end
     end
     # Ahora podemos llenar los elementos que falta. Nuestro rango empieza
-    # en 2 pero no necesariamente termina en el índice correspondiente al tamaño
+    # en 2 pero no necesariamente termina en el ï¿½ndice correspondiente al tamaï¿½o
     # por la parte anterior que vimos que el primer elemento no necesariamente
-    # se calculó con índices 1,1. Para eso usamos el contador j
+    # se calculï¿½ con ï¿½ndices 1,1. Para eso usamos el contador j
     for k in range(j+1, length(div_vec)-j)
-        # sd será la suma que aparece en la ecuación, inicializada como cero.
+        # sd serï¿½ la suma que aparece en la ecuaciï¿½n, inicializada como cero.
         sd = 0
         # Con el siguiente for se ejecuta la suma utilizando los coeficientes
         # de div_vec que ya se generaron.
@@ -147,15 +147,15 @@ function /(a::Taylor, b::Taylor)
     end
     # Se implementa el orden correcto m
     return Taylor(div_vec,m)
-end       
+end
 /(a::Taylor, b::Number) = a/Taylor(b)
 /(a::Number, b::Taylor) = Taylor(a)/b
 
-# Esta es la función exponencial aplicada a estructuras Taylor.
+# Esta es la funciï¿½n exponencial aplicada a estructuras Taylor.
 function exp(a::Taylor,gr::Int)
-    # Este primer if está armado para que no se regrese un error de
-    # inexactitud de meter un entero a una exponencial que trabaja 
-    # mínimo con números flotantes.
+    # Este primer if estï¿½ armado para que no se regrese un error de
+    # inexactitud de meter un entero a una exponencial que trabaja
+    # mï¿½nimo con nï¿½meros flotantes.
     if eltype(a.taylor_vec) <: Integer
         a = Taylor(convert(Array{Float64,1}, a.taylor_vec))
     end
@@ -163,9 +163,9 @@ function exp(a::Taylor,gr::Int)
     e = Taylor(0.,gr)
     # Promovemos los arreglos a y e.
     a, e = promote(a,e)
-    # Ahora la condición inicial sobre el arreglo.
+    # Ahora la condiciï¿½n inicial sobre el arreglo.
     e.taylor_vec[1] = exp(a.taylor_vec[1])
-    # El siguiente for es la relación de recurrencia hallada que
+    # El siguiente for es la relaciï¿½n de recurrencia hallada que
     # usa los valores E_k previamente obtenidos.
     for k in range(2,gr)
         e.taylor_vec[k] = (1/(k-1))*sum([(k-j)*e.taylor_vec[j]*a.taylor_vec[k-j+1] for j in range(1,k)])
@@ -174,15 +174,15 @@ function exp(a::Taylor,gr::Int)
     return e
 end
 
-# Implementamos la función sin poner el orden explícito.
+# Implementamos la funciï¿½n sin poner el orden explï¿½cito.
 exp(a::Taylor) = exp(a,a.gr)
 
 
-# Esta es la función logaritmo aplicada a estructuras Taylor.
+# Esta es la funciï¿½n logaritmo aplicada a estructuras Taylor.
 function log(a::Taylor,gr::Int)
-    # Este primer if está armado para que no se regrese un error de
-    # inexactitud de meter un entero a un logaritmo que trabaja 
-    # mínimo con números flotantes.
+    # Este primer if estï¿½ armado para que no se regrese un error de
+    # inexactitud de meter un entero a un logaritmo que trabaja
+    # mï¿½nimo con nï¿½meros flotantes.
     if eltype(a.taylor_vec) <: Integer
         a = Taylor(convert(Array{Float64,1}, a.taylor_vec))
     end
@@ -190,20 +190,20 @@ function log(a::Taylor,gr::Int)
     if a.taylor_vec[1] == 0
         return error("No se puede calcular el logaritmo de cero.")
     end
-    # Es posible calcular el logaritmo de números negativos pero tendríamos
-    # que convertir el arreglo a números complejos:
+    # Es posible calcular el logaritmo de nï¿½meros negativos pero tendrï¿½amos
+    # que convertir el arreglo a nï¿½meros complejos:
     if (eltype(a.taylor_vec[1]) <: Real) & (a.taylor_vec[1] < 0)
         a = Taylor(convert(Array{Complex{Float64},1}, a.taylor_vec))
     end
-    # Inicializamos el Taylor l con la condición inicial:
+    # Inicializamos el Taylor l con la condiciï¿½n inicial:
     l = Taylor(log(a.taylor_vec[1]),gr)
     if a.gr == 0
         return l
     end
     l.taylor_vec[2] = a.taylor_vec[2]/a.taylor_vec[1]
     a, l = promote(a,l)
-    # El siguiente for es la relación de recurrencia hallada que
-    # es básicamente el de la división de dos series de Taylor.
+    # El siguiente for es la relaciï¿½n de recurrencia hallada que
+    # es bï¿½sicamente el de la divisiï¿½n de dos series de Taylor.
     for k in range(2,gr-1)
         l.taylor_vec[k+1] = (1/a.taylor_vec[1])*(a.taylor_vec[k+1]-(1/k)*sum([i*l.taylor_vec[i+1]*a.taylor_vec[k-i+1] for i in range(1,k-1)]))
     end
@@ -214,7 +214,7 @@ end
 log(a::Taylor) = log(a,a.gr)
 
 
-# Esta es la función potencia aplicada a Taylors
+# Esta es la funciï¿½n potencia aplicada a Taylors
 # Primero Julia nos pide que definamos para un exponente entero
 # Por defautlt, si ex es entero se regresa un Taylor de orden ex veces
 # el Taylor original.
@@ -222,65 +222,59 @@ function ^(a::Taylor,ex::Integer)
     if ex < 0
         return error("No se puede exponenciar la serie negativamente")
     end
-    # Inicializamos el Taylor p con la condición inicial:
-    p = Taylor(^(a.taylor_vec[1],ex),a.gr*ex)
     if a.gr == 0
-        return p
+        return Taylor(a.taylor_vec[1]^ex)
     end
-    # Ahora encontramos donde empieza el arreglo que se está exponenciando,
-    # análogo a la división.
+    # Ahora encontramos donde empieza el arreglo que se estÃ¡ exponenciando,
+    # anÃ¡logo a la divisiÃ³n.
     j = 1
     for k in range(1,a.gr+1)
         if a.taylor_vec[k] != 0
             j = k
             break
-        elseif (k==a.gr+1) && (a.taylor_vec[k] == 0)
+        elseif k==a.gr+1
             # Si el arreglo es un cero se regresa un cero.
             return Taylor(0*a.taylor_vec[1])
         end
     end
-    a, p = promote(a,p)
-    # El siguiente for es la relación de recurrencia hallada que
-    # es básicamente el de la división de dos series de Taylor.
+    # Factorizamos el arreglo:
+    a = Taylor(a.taylor_vec[j:a.gr+1])
+    p = Taylor(a.taylor_vec[1]^ex,a.gr*ex)
+    a,p = promote(a,p)
+    # El siguiente for es la relaciÃ³n de recurrencia hallada que
+    # es bÃ¡sicamente el de la divisiÃ³n de dos series de Taylor.
     for k in range(1,p.gr)
-        p.taylor_vec[k+1] = (ex/k)*(1/a.taylor_vec[j])*(sum([p.taylor_vec[i]*(k+j-i)*a.taylor_vec[k+j-i+1] for i in range(1,k+j-1)])
+        p.taylor_vec[k+1] = (ex/k)*(1/a.taylor_vec[1])*(sum([p.taylor_vec[i]*(k+1-i)*a.taylor_vec[k-i+2] for i in range(1,k)])
         -sum([(i/ex)*p.taylor_vec[i+1]*a.taylor_vec[k-i+1] for i in range(1,k-1)]))
     end
-    return p
+    return Taylor(vcat(zeros(eltype(p.taylor_vec),(j-1)*ex),p.taylor_vec))
 end
 
-function ^(a::Taylor,ex::Number,gr=a.gr)
-    # Inicializamos el Taylor p con la condición inicial:
-    p = Taylor(^(a.taylor_vec[1],ex),gr)
+function ^(a::Taylor,ex::Number)
     if a.gr == 0
-        return p
+        return Taylor(a.taylor_vec[1]^ex)
     end
-    # Ahora encontramos donde empieza el arreglo que se está exponenciando,
-    # análogo a la división.
-    j = 1
-    for k in range(1,a.gr+1)
-        if a.taylor_vec[k] != 0
-            j = k
-            break
-        elseif (k==a.gr+1) && (a.taylor_vec[k] == 0)
-            return Taylor(0*a.taylor_vec[1])
-        end
+    # Ahora encontramos donde empieza el arreglo que se estÃ¡ exponenciando,
+    # anÃ¡logo a la divisiÃ³n.
+    if a.taylor_vec[1] ==0
+        return error("No se puede exponenciar a una pontenica no-entera si el tÃ©rmino constante es cero.")
     end
-    a, p = promote(a,p)
-    # El siguiente for es la relación de recurrencia hallada que
-    # es básicamente el de la división de dos series de Taylor.
+    p = Taylor(a.taylor_vec[1]^ex,a.gr)
+    # El siguiente for es la relaciÃ³n de recurrencia hallada que
+    # es bÃ¡sicamente el de la divisiÃ³n de dos series de Taylor.
     for k in range(1,p.gr)
-        p.taylor_vec[k+1] = (ex/k)*(1/a.taylor_vec[j])*(sum([p.taylor_vec[i]*(k+j-i)*a.taylor_vec[k+j-i+1] for i in range(1,k+j-1)])
+        p.taylor_vec[k+1] = (ex/k)*(1/a.taylor_vec[1])*(sum([p.taylor_vec[i]*(k+1-i)*a.taylor_vec[k-i+2] for i in range(1,k)])
         -sum([(i/ex)*p.taylor_vec[i+1]*a.taylor_vec[k-i+1] for i in range(1,k-1)]))
     end
     return p
 end
 
+^(a::Taylor,b::Number,c::Int) = ^(Taylor(a.taylor_vec,c),b)
 
 function sin(a::Taylor,gr::Int)
-    # Este primer if está armado para que no se regrese un error de
-    # inexactitud de meter un entero a una exponencial que trabaja 
-    # mínimo con números flotantes.
+    # Este primer if estï¿½ armado para que no se regrese un error de
+    # inexactitud de meter un entero a una exponencial que trabaja
+    # mï¿½nimo con nï¿½meros flotantes.
     if eltype(a.taylor_vec) <: Integer
         a = Taylor(convert(Array{Float64,1}, a.taylor_vec))
     end
@@ -290,7 +284,7 @@ function sin(a::Taylor,gr::Int)
     # Promovemos los arreglos a y s,c.
     a, s = promote(a,s)
     a, c = promote(a,c)
-    # El siguiente for es la relación de recurrencia hallada que
+    # El siguiente for es la relaciï¿½n de recurrencia hallada que
     # usa los valores S_k,C_k previamente obtenidos.
     for k in range(1,gr)
         s.taylor_vec[k+1] = (1/k)*sum([c.taylor_vec[i]*(k-i+1)*a.taylor_vec[k+2-i] for i in range(1,k)])
@@ -301,9 +295,9 @@ function sin(a::Taylor,gr::Int)
 end
 
 function cos(a::Taylor,gr::Int)
-    # Este primer if está armado para que no se regrese un error de
-    # inexactitud de meter un entero a una exponencial que trabaja 
-    # mínimo con números flotantes.
+    # Este primer if estï¿½ armado para que no se regrese un error de
+    # inexactitud de meter un entero a una exponencial que trabaja
+    # mï¿½nimo con nï¿½meros flotantes.
     if eltype(a.taylor_vec) <: Integer
         a = Taylor(convert(Array{Float64,1}, a.taylor_vec))
     end
@@ -313,7 +307,7 @@ function cos(a::Taylor,gr::Int)
     # Promovemos los arreglos a y s,c.
     a, s = promote(a,s)
     a, c = promote(a,c)
-    # El siguiente for es la relación de recurrencia hallada que
+    # El siguiente for es la relaciï¿½n de recurrencia hallada que
     # usa los valores S_k,C_k previamente obtenidos.
     for k in range(1,gr)
         s.taylor_vec[k+1] = (1/k)*sum([c.taylor_vec[i]*(k-i+1)*a.taylor_vec[k+2-i] for i in range(1,k)])
@@ -323,7 +317,7 @@ function cos(a::Taylor,gr::Int)
     return c
 end
 
-# Implementamos la función sin poner el orden explícito.
+# Implementamos la funciï¿½n sin poner el orden explï¿½cito.
 sin(a::Taylor) = sin(a,a.gr)
 cos(a::Taylor) = cos(a,a.gr)
 
