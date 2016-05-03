@@ -54,8 +54,5 @@ module AD
     
     ==(a::Dual, b::Dual) = a.fun==b.fun && a.der==b.der
     
-    #import Base: ^, exp, sqrt, cbrt, sin, cos, tan, cot, sec, csc, sinh, cosh, tanh, coth, sech, csch,
-    #asin,   acos,   atan,   acot,   asec,   acsc,
-    #asinh,  acosh,  atanh,  acoth,  asech,  acsch
-   
+    
 end
