@@ -1,4 +1,4 @@
-# El modulo en cuestion implementa diferenciacion automatica en Julia,
+b# El modulo en cuestion implementa diferenciacion automatica en Julia,
 # definiendo a los duales y a sus operaciones
 # Autores: Yuriko Yamamoto, Ignacio Vargas
 # Fecha: 29 de marzo, 2016
@@ -54,10 +54,8 @@ module AD
     
     ==(a::Dual, b::Dual) = a.fun==b.fun && a.der==b.der
     
-    import Base: ^, exp, sqrt, cbrt, sin, cos, tan, cot, sec, csc, sinh, cosh, tanh, coth, sech, csch,
-    asin,   acos,   atan,   acot,   asec,   acsc,
-    asinh,  acosh,  atanh,  acoth,  asech,  acsch
-    
-    
-
+    #import Base: ^, exp, sqrt, cbrt, sin, cos, tan, cot, sec, csc, sinh, cosh, tanh, coth, sech, csch,
+    #asin,   acos,   atan,   acot,   asec,   acsc,
+    #asinh,  acosh,  atanh,  acoth,  asech,  acsch
+   
 end
