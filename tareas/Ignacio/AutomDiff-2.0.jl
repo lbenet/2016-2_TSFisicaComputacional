@@ -1,4 +1,4 @@
-b# El modulo en cuestion implementa diferenciacion automatica en Julia,
+# El modulo en cuestion implementa diferenciacion automatica en Julia,
 # definiendo a los duales y a sus operaciones
 # Autores: Yuriko Yamamoto, Ignacio Vargas
 # Fecha: 29 de marzo, 2016
