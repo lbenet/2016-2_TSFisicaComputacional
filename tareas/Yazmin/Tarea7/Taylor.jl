@@ -1,4 +1,4 @@
-#02/05/16
+﻿#02/05/16
 
 #Este módulo implementa la definición del tipo Taylor, así como la de sus operaciones.
 
@@ -77,6 +77,13 @@ function *(a::Taylor,b::Taylor)
         end
     end
     return Taylor(c)
+end
+
+function *(a::Real,b::Taylor)
+    for i in range(1,b.order+1)
+        b.coef[i]=a*b.coef[i]
+    end
+    return Taylor(b.coef)
 end
 
 function /(a::Taylor,b::Taylor)
