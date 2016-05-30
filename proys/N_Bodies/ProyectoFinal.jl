@@ -1,11 +1,12 @@
 
+__precompile__(true)
 
 using TaylorSeries
 using PyPlot
 using PyCall
 @pyimport matplotlib.animation as anim
 
-function anima3C(c1,c2,c3, nombre::ASCIIString)
+function anima3C(c1,c2,c3, nombre::ASCIIString, loop)
     px1 = [x[1] for x in c1[1]]
     px2 = [x[1] for x in c2[1]]
     px3 = [x[1] for x in c3[1]]
@@ -14,8 +15,8 @@ function anima3C(c1,c2,c3, nombre::ASCIIString)
     py3 = [x[2] for x in c3[1]]
     
     
-    fig = figure(figsize=(5,5))
-    cuadros = [[plot(px1[i],py1[i], ",", px2[i],py2[i],  ",", px3[i],py3[i], marker = "*", color ="r")] for i=1:length(px1)]
+    fig = figure(figsize=(10,10))
+    cuadros = [[plot(px1[i],py1[i], ",", px2[i],py2[i],  ",", px3[i],py3[i], marker = ".", color ="r")] for i=1:loop:length(px1)]
     
     animacion = anim.ArtistAnimation(fig, cuadros, interval=200, blit=true) 
     animacion[:save](nombre*".mp4", extra_args=["-vcodec", "libx264", "-pix_fmt", "yuv420p"])
@@ -25,17 +26,12 @@ function muestra_animacion(nombre::ASCIIString)
     display("text/html", string("""<video autoplay controls><source src="data:video/x-m4v;base64,""",base64(open(readbytes,nombre*".mp4")),"""" type="video/mp4"></video>"""))
 end
 
-x = Taylor1([1])
-
-x.order
-
-eps(1.)
 
 #Agrego Línea para instalar modulo de Taylor (cortesia de Luis)
 #Pkg.add("TaylorSeries")
 
 const epsilon = 1.0e-20
-const G = 6.667e-11
+const G = 1
 function paso_int{T<:Real}(x_0::Taylor1{T})
     orden = x_0.order
     h1 = (epsilon/abs(x_0.coeffs[orden + 1]))^(1/orden) 
