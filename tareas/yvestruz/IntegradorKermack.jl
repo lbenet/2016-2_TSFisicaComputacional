@@ -16,7 +16,7 @@ module KMK
     	import Base: +, -, *, /, ^
 	import ADT: Taylor, gradomax, prom, evaluar
 
-    	export coefs_1, paso, ev_horner, integrador_kermack, coefs_1_re, integrador_kermack_re, coefs_SIRS, integrador_kermack_SIRS, coefs_3, k_3, coefs_3_reincidencia, k_3_reincidencia
+    	export coefs_1, paso, ev_horner, integrador_kermack, coefs_1_re, integrador_kermack_re, coefs_SIRS_muerte, integrador_kermack_SIRS_muerte, coefs_3, k_3, coefs_3_reincidencia, k_3_reincidencia
 
 
 ########### SIR 1 especie
@@ -155,7 +155,7 @@ end
 
 ########### SIRS con nacimientos y muertes
 ## Coefs
-function coefs_SIRS(γ,β,μ,f,S_0,I_0,R_0,n=50)
+function coefs_SIRS_muerte(γ,β,μ,f,S_0,I_0,R_0,n=50)
     N=S_0+I_0+R_0
     s=[S_0]
     i=[I_0]
@@ -195,7 +195,7 @@ integrador_kermack(N=población total,I0=infectados inicialmente,t0=tiempo inici
 Se consideran nacimientos y muertes, pero se asume que la tasa de natalidad es igual que la de mortalidad. Con esto,
 la población total se mantiene constante
 """
-function integrador_kermack_SIRS(N, I0, R0, t0, tf, gamma, beta,mu,f,n=50)
+function integrador_kermack_SIRS_muerte(N, I0, R0, t0, tf, gamma, beta,mu,f,n=50)
     S0 = N - I0 - R0
     t = [t0]
     s = [S0]
