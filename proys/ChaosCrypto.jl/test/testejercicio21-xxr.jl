@@ -1,0 +1,6 @@
+include("testejercicio2.jl")
+title("Ejercicio 9.6.4 - 1, X vs Xr")
+plot(t21, [x[1] for x in vecs21], label="x")
+plot(t21, [x[4] for x in vecs21], label="xr")
+legend()
+show()
