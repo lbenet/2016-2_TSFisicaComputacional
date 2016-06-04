@@ -202,7 +202,7 @@ function integrador_kermack_SIRS_muerte(N, I0, R0, t0, tf, gamma, beta,mu,f,n=50
     i = [I0]
     r = [R0]
     while t0 < tf
-        S,I,R = coefs_SIRS(gamma, beta,mu,f, S0, I0, R0,n)
+        S,I,R = coefs_SIRS_muerte(gamma, beta,mu,f, S0, I0, R0,n)
         h_s = paso(S)
         h_i = paso(I)
         h_r = paso(R)
