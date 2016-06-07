@@ -6,7 +6,11 @@ using PyPlot
 using PyCall
 @pyimport matplotlib.animation as anim
 
-function anima3C(c1,c2,c3, nombre::ASCIIString, loop)
+"""
+'anima3C' Recibe la información del integrador 'Integra3' sobre los tres cuerpos para animar las posiciones, recibe también el nombre que desea darse a la animación, 'loop', recibe información sobre el número de saltos que debe dar entre cada posición.
+Requiere la previa instalación de 'ffmpeg'
+"""
+function anima3C(c1,c2,c3, nombre::ASCIIString, loop::Int)
     px1 = [x[1] for x in c1[1]]
     px2 = [x[1] for x in c2[1]]
     px3 = [x[1] for x in c3[1]]
@@ -22,6 +26,9 @@ function anima3C(c1,c2,c3, nombre::ASCIIString, loop)
     animacion[:save](nombre*".mp4", extra_args=["-vcodec", "libx264", "-pix_fmt", "yuv420p"])
 end
 
+"""
+'muestra_animacion' contiene el código necesario para mostrar en el notebook un video .mp4 que se halle en el mismo directorio que el notebook donde se trabaja
+"""
 function muestra_animacion(nombre::ASCIIString)
     display("text/html", string("""<video autoplay controls><source src="data:video/x-m4v;base64,""",base64(open(readbytes,nombre*".mp4")),"""" type="video/mp4"></video>"""))
 end
@@ -30,8 +37,13 @@ end
 #Agrego Línea para instalar modulo de Taylor (cortesia de Luis)
 #Pkg.add("TaylorSeries")
 
+#Definición de constantes
 const epsilon = 1.0e-20
 const G = 1
+
+"""
+Calcula el valor de 'h' para el siguiente paso de integración, es necesario que reciba el valor del Taylor calculado para el parámetro a integrar
+"""
 function paso_int{T<:Real}(x_0::Taylor1{T})
     orden = x_0.order
     h1 = (epsilon/abs(x_0.coeffs[orden + 1]))^(1/orden)
@@ -39,6 +51,10 @@ function paso_int{T<:Real}(x_0::Taylor1{T})
     min(h1, h2)
 end
 
+
+"""
+Calcula el valor del parámetro de x_{n+1} empleando el método de Horner
+"""
 function Horner{T<:Real, S<:Real}(x_0::Taylor1{S}, h::T)
     n = x_0.order
     suma = zeros(n)
@@ -49,7 +65,23 @@ function Horner{T<:Real, S<:Real}(x_0::Taylor1{S}, h::T)
     suma[n]
 end
 
-#function Integrador_1(pos_iniciales, vel_ini, masas::Array{Float64,1}, t0::Float64, tf::Float64, p::Int)
+"""
+'Integrador3' Integra las ecuaciones de los tres cuerpos empleando la ley de la gravitación universal hasta el tiempo 'tf' Usando las aproximaciones de Taylor a orden 'p'. Considerando las condiciones iniciales. 'cond_ini' debe ser un arreglo con la información de cada cuerpo organizada de la siguiente forma:
+
+'cond_ini' = [c1, c2, c3]
+
+donde cn = [masa_n, x0_n, y0_n, z0_n, vx0_n, vy0_n, vz0_n]
+
+Regresa cuatro arreglos con la siguiente información:
+
+ts --> tiempos
+
+c1 --> Arreglo con la información de posiciones y velocidades del cuerpo 1
+
+c2 --> Arreglo con la información de posiciones y velocidades del cuerpo 2
+
+c3 --> Arreglo con la información de posiciones y velocidades del cuerpo 3
+"""
 function Integrador3(cond_ini, tf::Float64, p=28)
 
     #Para ahorrar al momento de escribir los nombres se indicarán así: pi donde i es el número de cuerpo,
@@ -245,6 +277,19 @@ r23 = ((Taylor_arr_x2 - Taylor_arr_x3)^2 + (Taylor_arr_y2 - Taylor_arr_y3)^2 + (
     ts, cuerpo1, cuerpo2, cuerpo3
 end
 
+"""
+'IntegradorN' Integra las ecuaciones de los N cuerpos empleando la ley de la gravitación universal hasta el tiempo 'tf' Usando las aproximaciones de Taylor a orden 'p'. Considerando las condiciones iniciales. 'cond_ini' debe ser un arreglo con la información de cada cuerpo organizada de la siguiente forma:
+
+'cond_ini' = [c1, c2, ... , cn]
+
+donde ci = [masa_i, x0_i, y0_i, z0_i, vx0_i, vy0_i, vz0_i] 
+
+Regresa cuatro arreglos con la siguiente información:
+
+ts --> tiempos
+
+ci --> Arreglo con la información de posiciones y velocidades del cuerpo i
+"""
 function IntegradorN(cond_ini, tf, p=28)
     #Creamos símbolos y expresiones las variables internas
     #Nombres para variables de posiciones, velocidades y masas i-ésimas
@@ -486,6 +531,10 @@ function IntegradorN(cond_ini, tf, p=28)
     eval(expr)
 end
 
+"""
+'Energia_3' calcula la energía de un sistema de tres partículas a cada paso de tiempo, recibe la información proporcionada por el integrador 'Integrador3' correspondiente a posiciones y velocidades de los tres cuerpos.
+Devuelve un arreglo con la energía total del sistema en cada paso de tiempo.
+"""
 function Energia_3(c1, c2, c3, masas)
     #Extraemos la información de posiciones y velocidades
     vc1 = c1[2]
@@ -509,7 +558,10 @@ function Energia_3(c1, c2, c3, masas)
     ϵ
 end
 
-<<<<<<< HEAD
+"""
+'Angular_3' calcula el momento angular de un sistema de tres partículas a cada paso de tiempo, recibe la información proporcionada por el integrador 'Integrador3' correspondiente a posiciones y velocidades de los tres cuerpos.
+Devuelve un arreglo con el momento angular total del sistema en cada paso de tiempo.
+"""
 function Angular_3(c1, c2, c3, masas)
     #Extraemos la información de posiciones y velocidades
     vc1 = c1[2]
@@ -533,7 +585,8 @@ function Angular_3(c1, c2, c3, masas)
     end
     L
 end
-=======
+
+
 function Integrador_Restringido(masas, p0, v0, tf::Float64, p=28)
 
 
@@ -581,7 +634,7 @@ function Integrador_Restringido(masas, p0, v0, tf::Float64, p=28)
             #@show Taylor_arr_x1
             ##Definimos la operación de las 6 ecs de movimiento.
 
->>>>>>> 5613e21804e9e5fd8dcd9750537b6c2abf9fb60b
+
 
             r1 = ((Taylor_arr_x1 - mu)^2 + (Taylor_arr_y1)^2 + (Taylor_arr_vz1)^2)
             r2 = ((Taylor_arr_x1 + alpha)^2 + (Taylor_arr_y1)^2 + (Taylor_arr_vz1)^2)
