@@ -680,6 +680,7 @@ La función identifica el tamaño que la solución ocupa y posteriormente divide
 en `r×r×r` cubos. La función cuenta el número de cubos que poseen al menos un punto de la
 solución dentro de ellos.
 """
+
 function conteo_fractal(x::Array{Array{Real,1},1},r::Int64)
 
     #En caso de que demos una partición menor que cero, atrapamos el error.
@@ -711,6 +712,7 @@ function conteo_fractal(x::Array{Array{Real,1},1},r::Int64)
     end
 
     #Guardamos los puntos en que hemos dividido los intervalos.
+    
     for i=1:3
         division[i,1] = cota_inf[i]
         for j = 2:r+1
