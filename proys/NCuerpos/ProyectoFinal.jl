@@ -509,4 +509,27 @@ function Energia_3(c1, c2, c3, masas)
     ϵ
 end
 
+function Angular_3(c1, c2, c3, masas)
+    #Extraemos la información de posiciones y velocidades
+    vc1 = c1[2]
+    vc2 = c2[2]
+    vc3 = c3[2]
+    pc1 = c1[1]
+    pc2 = c2[1]
+    pc3 = c3[1]
+    #Obtenemos el valor de las masas
+    m1 = masas[1]
+    m2 = masas[2]
+    m3 = masas[3]
+    #Obtenemos información del L_T a cada paso del tiempo
+    L = typeof(vc1[1])[]
+    for j in 1:length(vc1)
+        L1 = m1*(pc1[j])×(vc1[j])
+        L2 = m2*(pc2[j])×(vc2[j])
+        L3 = m3*(pc3[j])×(vc3[j])
+        LT = L1 + L2 + L3
+        push!(L, LT)
+    end
+    L
+end
 
