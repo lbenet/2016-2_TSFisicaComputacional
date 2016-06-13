@@ -1,4 +1,3 @@
-
 __precompile__(true)
 
 using TaylorSeries
@@ -25,6 +24,8 @@ function anima3C(c1,c2,c3, nombre::ASCIIString, loop::Int)
     animacion = anim.ArtistAnimation(fig, cuadros, interval=200, blit=true)
     animacion[:save](nombre*".mp4", extra_args=["-vcodec", "libx264", "-pix_fmt", "yuv420p"])
 end
+
+println("Aqui si")
 
 """
 'muestra_animacion' contiene el código necesario para mostrar en el notebook un video .mp4 que se halle en el mismo directorio que el notebook donde se trabaja
@@ -64,6 +65,10 @@ function Horner{T<:Real, S<:Real}(x_0::Taylor1{S}, h::T)
     end
     suma[n]
 end
+
+
+
+
 
 """
 'Integrador3' Integra las ecuaciones de los tres cuerpos empleando la ley de la gravitación universal hasta el tiempo 'tf' Usando las aproximaciones de Taylor a orden 'p'. Considerando las condiciones iniciales. 'cond_ini' debe ser un arreglo con la información de cada cuerpo organizada de la siguiente forma:
@@ -119,9 +124,9 @@ function Integrador3(cond_ini, tf::Float64, p=28)
         arr_vy1 = Float64[v1[end][2]]
         arr_vy2 = Float64[v2[end][2]]
         arr_vy3 = Float64[v3[end][2]]
-        arr_vz1 = Float64[p1[end][3]]
-        arr_vz2 = Float64[p2[end][3]]
-        arr_vz3 = Float64[p3[end][3]]
+        arr_vz1 = Float64[v1[end][3]]
+        arr_vz2 = Float64[v2[end][3]]
+        arr_vz3 = Float64[v3[end][3]]
 
         #Creo Taylor's para cada parámetro
         for j in 1:p
@@ -148,35 +153,28 @@ function Integrador3(cond_ini, tf::Float64, p=28)
             ##Definimos la operación de las 6 ecs de movimiento.
 
 
-r12 = ((Taylor_arr_x1 - Taylor_arr_x2)^2 + (Taylor_arr_y1 - Taylor_arr_y2)^2 + (Taylor_arr_z1 - Taylor_arr_z2)^2)^(1/2)
-r13 = ((Taylor_arr_x1 - Taylor_arr_x3)^2 + (Taylor_arr_y1 - Taylor_arr_y3)^2 + (Taylor_arr_z1 - Taylor_arr_z3)^2)^(1/2)
-r23 = ((Taylor_arr_x2 - Taylor_arr_x3)^2 + (Taylor_arr_y2 - Taylor_arr_y3)^2 + (Taylor_arr_z2 - Taylor_arr_z3)^2)^(1/2)
+r12 = ((Taylor_arr_x1 - Taylor_arr_x2)^2 + (Taylor_arr_y1 - Taylor_arr_y2)^2 + (Taylor_arr_z1 - Taylor_arr_z2)^2)^(3/2)
+r13 = ((Taylor_arr_x1 - Taylor_arr_x3)^2 + (Taylor_arr_y1 - Taylor_arr_y3)^2 + (Taylor_arr_z1 - Taylor_arr_z3)^2)^(3/2)
+r23 = ((Taylor_arr_x2 - Taylor_arr_x3)^2 + (Taylor_arr_y2 - Taylor_arr_y3)^2 + (Taylor_arr_z2 - Taylor_arr_z3)^2)^(3/2)
 
             #@show r12, r3, r23
+            
+            #Definimos los vectores unitarios
 
             #Para el cuerpo 1
-            fx1 = -G*(m2*(Taylor_arr_x1 - Taylor_arr_x2)/(r12)^2 + m3*(Taylor_arr_x1 - Taylor_arr_x3)/(r13)^2)
-            fy1 = -G*(m2*(Taylor_arr_y1 - Taylor_arr_y2)/(r12)^2 + m3*(Taylor_arr_y1 - Taylor_arr_y3)/(r13)^2)
-            fz1 = -G*(m2*(Taylor_arr_z1 - Taylor_arr_z2)/(r12)^2 + m3*(Taylor_arr_z1 - Taylor_arr_z3)/(r13)^2)
+            fx1 = -G*(m2*(Taylor_arr_x1 - Taylor_arr_x2)/(r12) + m3*(Taylor_arr_x1 - Taylor_arr_x3)/(r13))
+            fy1 = -G*(m2*(Taylor_arr_y1 - Taylor_arr_y2)/(r12) + m3*(Taylor_arr_y1 - Taylor_arr_y3)/(r13))
+            fz1 = -G*(m2*(Taylor_arr_z1 - Taylor_arr_z2)/(r12) + m3*(Taylor_arr_z1 - Taylor_arr_z3)/(r13))
             #Para el cuerpo 2
-            fx2 = -G*(m3*(Taylor_arr_x2 - Taylor_arr_x3)/(r23)^2 + m1*(Taylor_arr_x2 - Taylor_arr_x1)/(r12)^2)
-            fy2 = -G*(m3*(Taylor_arr_y2 - Taylor_arr_y3)/(r23)^2 + m1*(Taylor_arr_y2 - Taylor_arr_y1)/(r12)^2)
-            fz2 = -G*(m3*(Taylor_arr_z2 - Taylor_arr_z3)/(r23)^2 + m1*(Taylor_arr_z2 - Taylor_arr_z1)/(r12)^2)
+            fx2 = -G*(m3*(Taylor_arr_x2 - Taylor_arr_x3)/(r23) + m1*(Taylor_arr_x2 - Taylor_arr_x1)/(r12))
+            fy2 = -G*(m3*(Taylor_arr_y2 - Taylor_arr_y3)/(r23) + m1*(Taylor_arr_y2 - Taylor_arr_y1)/(r12))
+            fz2 = -G*(m3*(Taylor_arr_z2 - Taylor_arr_z3)/(r23) + m1*(Taylor_arr_z2 - Taylor_arr_z1)/(r12))
             #Para el cuerpo 3
-            fx3 = -G*(m1*(Taylor_arr_x3 - Taylor_arr_x1)/(r13)^2 + m2*(Taylor_arr_x3 - Taylor_arr_x2)/(r23)^2)
-            fy3 = -G*(m1*(Taylor_arr_y3 - Taylor_arr_y1)/(r13)^2 + m2*(Taylor_arr_y3 - Taylor_arr_y2)/(r23)^2)
-            fz3 = -G*(m1*(Taylor_arr_z3 - Taylor_arr_z1)/(r13)^2 + m2*(Taylor_arr_z3 - Taylor_arr_z2)/(r23)^2)
+            fx3 = -G*(m1*(Taylor_arr_x3 - Taylor_arr_x1)/(r13) + m2*(Taylor_arr_x3 - Taylor_arr_x2)/(r23))
+            fy3 = -G*(m1*(Taylor_arr_y3 - Taylor_arr_y1)/(r13) + m2*(Taylor_arr_y3 - Taylor_arr_y2)/(r23))
+            fz3 = -G*(m1*(Taylor_arr_z3 - Taylor_arr_z1)/(r13) + m2*(Taylor_arr_z3 - Taylor_arr_z2)/(r23))
 
             #Incluimos los nuevos coeficientes
-            arr_x1 = push!(arr_x1, Taylor_arr_vx1.coeffs[j]/j)
-            arr_x2 = push!(arr_x2, Taylor_arr_vx2.coeffs[j]/j)
-            arr_x3 = push!(arr_x3, Taylor_arr_vx3.coeffs[j]/j)
-            arr_y1 = push!(arr_y1, Taylor_arr_vy1.coeffs[j]/j)
-            arr_y2 = push!(arr_y2, Taylor_arr_vy2.coeffs[j]/j)
-            arr_y3 = push!(arr_y3, Taylor_arr_vy3.coeffs[j]/j)
-            arr_z1 = push!(arr_z1, Taylor_arr_vz1.coeffs[j]/j)
-            arr_z2 = push!(arr_z2, Taylor_arr_vz2.coeffs[j]/j)
-            arr_z3 = push!(arr_z3, Taylor_arr_vz3.coeffs[j]/j)
             arr_vx1 =push!(arr_vx1, fx1.coeffs[j]/j)
             arr_vx2 =push!(arr_vx2, fx2.coeffs[j]/j)
             arr_vx3 =push!(arr_vx3, fx3.coeffs[j]/j)
@@ -186,6 +184,17 @@ r23 = ((Taylor_arr_x2 - Taylor_arr_x3)^2 + (Taylor_arr_y2 - Taylor_arr_y3)^2 + (
             arr_vz1 =push!(arr_vz1, fz1.coeffs[j]/j)
             arr_vz2 =push!(arr_vz2, fz2.coeffs[j]/j)
             arr_vz3 =push!(arr_vz3, fz3.coeffs[j]/j)
+            
+            arr_x1 = push!(arr_x1, Taylor_arr_vx1.coeffs[j]/j)
+            arr_x2 = push!(arr_x2, Taylor_arr_vx2.coeffs[j]/j)
+            arr_x3 = push!(arr_x3, Taylor_arr_vx3.coeffs[j]/j)
+            arr_y1 = push!(arr_y1, Taylor_arr_vy1.coeffs[j]/j)
+            arr_y2 = push!(arr_y2, Taylor_arr_vy2.coeffs[j]/j)
+            arr_y3 = push!(arr_y3, Taylor_arr_vy3.coeffs[j]/j)
+            arr_z1 = push!(arr_z1, Taylor_arr_vz1.coeffs[j]/j)
+            arr_z2 = push!(arr_z2, Taylor_arr_vz2.coeffs[j]/j)
+            arr_z3 = push!(arr_z3, Taylor_arr_vz3.coeffs[j]/j)
+            
         end
         #Hacemos Taylor de todos los arreglos finales
         Taylor_arr_x1 = Taylor1(arr_x1)
@@ -221,13 +230,17 @@ r23 = ((Taylor_arr_x2 - Taylor_arr_x3)^2 + (Taylor_arr_y2 - Taylor_arr_y3)^2 + (
         h10 = paso_int(Taylor_arr_vx1)
         h11 = paso_int(Taylor_arr_vx2)
         h12 = paso_int(Taylor_arr_vx3)
-        h13 = paso_int(Taylor_arr_vz1)
-        h14 = paso_int(Taylor_arr_vz2)
-        h15 = paso_int(Taylor_arr_vz3)
+        h13 = paso_int(Taylor_arr_vy1)
+        h14 = paso_int(Taylor_arr_vy2)
+        h15 = paso_int(Taylor_arr_vy3)
+        h16 = paso_int(Taylor_arr_vz1)    
+        h17 = paso_int(Taylor_arr_vz2)
+        h18 = paso_int(Taylor_arr_vz3)
+            
 
-
+            
         #Elegimos el h más pequeño
-        h = min(h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15)
+        h = min(h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13, h14, h15, h16, h17, h18)
         t += h
         #Calculamos el siguiente paso usando Horner
         x1 = evaluate(Taylor_arr_x1, h)
@@ -410,7 +423,7 @@ function IntegradorN(cond_ini, tf, p=28)
                 expy = :(0)
                 expz = :(0)
                 for ℓ in indices
-                    rij = :( (($(n_Tarrxj(j)) - $(n_Tarrxj(ℓ)))^2 + ($(n_Tarryj(j)) - $(n_Tarryj(ℓ)))^2 + ($(n_Tarrzj(j)) - $(n_Tarrzj(ℓ)))^2 )^1/2 )
+                    rij = :( (($(n_Tarrxj(j)) - $(n_Tarrxj(ℓ)))^2 + ($(n_Tarryj(j)) - $(n_Tarryj(ℓ)))^2 + ($(n_Tarrzj(j)) - $(n_Tarrzj(ℓ)))^2 )^3/2 )
                     expx = :(($expx) - ($(n_mj(ℓ)))*($(n_Tarrxj(j)) - $(n_Tarrxj(ℓ)))/($rij))
                     expy = :(($expy) - ($(n_mj(ℓ)))*($(n_Tarryj(j)) - $(n_Tarryj(ℓ)))/($rij))
                     expz = :(($expz) - ($(n_mj(ℓ)))*($(n_Tarrzj(j)) - $(n_Tarrzj(ℓ)))/($rij))
@@ -530,6 +543,25 @@ function IntegradorN(cond_ini, tf, p=28)
     end
     eval(expr)
 end
+
+function CM_3(c1, c2, c3, masas)
+    #Extraemos la información de posiciones y velocidades
+    vc1 = c1[2]
+    vc2 = c2[2]
+    vc3 = c3[2]
+    pc1 = c1[1]
+    pc2 = c2[1]
+    pc3 = c3[1]
+    #Obtenemos el valor de las masas
+    m1 = masas[1]
+    m2 = masas[2]
+    m3 = masas[3]
+    M = m1 + m2 + m3
+    
+    CM = (m1*pc1 + m2*pc2 + m3*pc3)/M
+    CM
+end
+
 
 """
 'Energia_3' calcula la energía de un sistema de tres partículas a cada paso de tiempo, recibe la información proporcionada por el integrador 'Integrador3' correspondiente a posiciones y velocidades de los tres cuerpos.
