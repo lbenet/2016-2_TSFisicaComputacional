@@ -19,7 +19,7 @@ function anima3C(c1,c2,c3, nombre::ASCIIString, loop::Int)
     py3 = [x[2] for x in c3[1]]
 
 
-    fig = figure(figsize=(10,10))
+    fig = figure(figsize=(5,5))
     cuadros = [[plot(px1[i],py1[i], ",", px2[i],py2[i],  ",", px3[i],py3[i], marker = ".", color ="r")] for i=1:loop:length(px1)]
 
     animacion = anim.ArtistAnimation(fig, cuadros, interval=200, blit=true)
@@ -584,6 +584,39 @@ function Angular_3(c1, c2, c3, masas)
         push!(L, LT)
     end
     L
+end
+
+"""
+'CalculaCM(C1, C2, m3)' obtiene, a partir de la información de dos cuerpos 'C1' y 'C2' la información sobre posiciones y velocidades de un tercer cuerpo, de tal forma que el centro de masa de éste sistema se encuentre en el origen y se quede estático (por lo menos a tiempo inicial) 'C1' y 'C2' deben contener información de la siguiente forma:
+C1 = [m1, x1, y1, z1, vx1, vy1, vz1] donde m1 es el valor de la masa; x1, y1, z1 las coordendas de la posición y vx1, vy1, vz1 los valores de la velocidad en componentes cartesianas.
+
+La función regresa un arreglo que puede ser introducido como argumento de la función 'Integrador3'.
+"""
+function CalculaCM(C1, C2, m3)
+    #Identificamos la información de CS:
+    #Primero las posiciones
+    p1 = Float64[C1[2], C1[3], C1[4]]
+    p2 = Float64[C2[2], C2[3], C2[4]]
+    p3 = zeros(p2)
+    #Ahora las velocidades
+    v1 = Float64[C1[5], C1[6], C1[7]]
+    v2 = Float64[C2[5], C2[6], C2[7]]
+    v3 = zeros(v1)
+    #Por último las las masas
+    m1 = C1[1]
+    m2 = C2[1]
+    
+    #Por comodidad queremos que el centro de masa esté en el origen, en ese caso:
+    p3 = -(m1*p1 + m2*p2)/m3
+    
+    #Queremos que el centro de masa se quede estático, entonces:
+    v3 = -(m1*v1 + m2*v2)/m3
+    
+    #Ahora, regresemos la información de tal forma que el integrador lo acepte
+    C3 = Float64[m3, p3[1], p3[2], p3[3], v3[1], v3[2], v3[3]]
+    CS = typeof(C3)[C1, C2, C3]
+    
+    CS    
 end
 
 
