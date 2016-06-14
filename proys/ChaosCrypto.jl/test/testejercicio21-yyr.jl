@@ -1,0 +1,8 @@
+include("testejercicio2.jl")
+title("Ejercicio 9.6.4 - 1, Y vs Yr")
+plot(t21, [x[2] for x in vecs21], label="y")
+plot(t21, [x[5] for x in vecs21], label="yr")
+xlabel("t")
+ylabel("y, yr")
+legend()
+show()
