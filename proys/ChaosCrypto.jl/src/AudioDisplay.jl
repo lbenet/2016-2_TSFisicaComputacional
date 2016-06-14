@@ -1,3 +1,14 @@
+"""
+#Módulo AudioDisplay
+
+Módulo auxiliar que nos permite desplegar reproductores de audio dentro de los Jupyter notebooks.
+Se sirve del módulo WAV.jl
+
+Crédito: @jfsantos
+https://github.com/jfsantos/IJuliaNotebooks/tree/master/intro_audio_signal_processing
+
+"""
+
 module AudioDisplay
 
 export audioplayer

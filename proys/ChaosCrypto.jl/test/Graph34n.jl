@@ -1,5 +1,6 @@
 include("Ej3Taylor.jl")
 
+println(ts)
 
 #Gráfica 1
 plot(ts,m) #Gráfica de la señal o mensaje

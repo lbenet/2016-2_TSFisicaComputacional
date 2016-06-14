@@ -23,6 +23,8 @@ m=sin(ts)
 s=[x[1] for x in xs]+m
 mhat = s-[x[4] for x in xs]
 title("Ejercicio 3 con RK")
+        xlabel("tiempo")
+        ylabel("amplitud")
 plot(ts,m)
 plot(ts,mhat)
 end

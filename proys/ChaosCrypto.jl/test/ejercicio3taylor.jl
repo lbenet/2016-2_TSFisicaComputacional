@@ -29,6 +29,8 @@ fig = figure()
         title("Comparación señal y resultado")
         plot(t,m, label="Señal")
         plot(t,mhat, label="Resultado")
+        xlabel("tiempo")
+        ylabel("amplitud")
         legend()
     end
 end

@@ -12,7 +12,7 @@ using Interact
 fig = figure()
 @manipulate for φ = .0001:.005:.3 
     withfig(fig) do
-    @show(φ)
+   # @show(φ)
 
 
 
@@ -49,15 +49,15 @@ mhat = s - [x[4] for x in xs] #mensaje recibido, que es s - xr, debe ser aproxim
 
 #Gráfica 2   
 
-plot(ts,[x[1] - x[4] for x in xs]) #Gráfica de la diferencia entre el mensaje enviado y el recibido
+        plot(ts,[x[1] - x[4] for x in xs], label="diferencia") #Gráfica de la diferencia entre el mensaje enviado y el recibido
 ylim(-5, 5)
-xlim(0.0, 500.0)
+xlim(0.0, 200.0)
 title("Gráfica de la diferencia entre la señal enviada y recibida")
-xlabel("t")
+xlabel("Tiempo")
+ylabel("amplitud")
+legend()
+#show()
         
-        
-        
-
 
 
 end #del manipulate

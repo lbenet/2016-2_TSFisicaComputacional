@@ -1,5 +1,21 @@
 __precompile__(true)
 
+"""
+#Módulo ChaosCrypto
+
+Módulo principal que llama al código de los módulos de Diferenciación Automática, Runge-Kutta, Integración por Taylor
+y el despliegue de audio en los Jupyter notebooks. Busca simplificar la llamada de estos módulos juntándolos todos en uno.
+
+Véanse
+
+```Automata.jl
+Lorenz.jl
+RK4.jl
+AudioDisplay.jl
+```
+
+"""
+
 module ChaosCrypto
 
 export AD, LO, RK, audioplayer

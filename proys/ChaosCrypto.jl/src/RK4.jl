@@ -1,6 +1,15 @@
 ## Para precompilar las cosas
 __precompile__(true)
 
+"""
+#Modulo RK
+
+Implementación del método de integración de ecuaciones diferenciales Runge-Kutta. 
+Solamente para fines ilustrativos, utilizado para probar
+las primeras versiones de nuestras integraciones. Deprecado a favor de método con Taylor.
+"""
+
+
 module RK
     export runge4, integrar
     function runge4(f,x,t,dt)
@@ -19,7 +28,7 @@ module RK
         tiempos = [t0]
         xs = typeof(x0)[x0]
 
-        #x = copy(x0)  # ver pythontutor.com
+        #x = copy(x0)
         
         x = x0
         

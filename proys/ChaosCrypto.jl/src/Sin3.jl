@@ -1,9 +1,6 @@
 #Ejercicio 9.6.5
 #Variando frecuencias
 
-push!(LOAD_PATH, "/Users/Yuriko/ChaosCrypto.jl/src/")
-
-
 using ChaosCrypto
 using PyPlot
 using Interact
@@ -15,7 +12,16 @@ fig = figure()
     @show(φ)
 
 
+"""
+#Resolución de Ecuaciones de Lorenz por Método de Taylor, con mensaje de Seno
+        
+        lorenzSinTaylor(xx, t) 
 
+Función que se vale de la diferenciación automática con Taylor para calcular las ecuaciones de Lorenz
+con el mensaje de una función seno incluido.
+
+"""
+        
 function lorenzSinTaylor(xx, t) 
     x, y, z, xr, yr, zr = xx #6 ecuaciones de Lorenz
     
@@ -38,6 +44,8 @@ function lorenzSinTaylor(xx, t)
 
 end
 
+#Integración con Taylor del resultado de lorenzSinTaylor
+        
 xs, ts = LO.integrador([1.0,1.0,1.0,1.0,10.0,10.0], lorenzSinTaylor, 500.0)
 #φ = 1e-3
     m = sin(ts) #señal

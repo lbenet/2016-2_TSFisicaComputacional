@@ -1,7 +1,12 @@
-# Aqui viene una explicación de lo que se hace en el módulo, los autores y la fecha
-
-# La siguiente instrucción sirve para *precompilar* el módulo
 __precompile__(true)
+
+"""
+#Modulo AD (Lorenz.jl)
+
+Diferenciación automática por medio de series de Taylor. 
+Declaraciones del tipo, funciones que determinan cómo se realizan operaciones
+manipulando series de Taylor. Base para trabajar con integración.
+"""
 
 module AD
     export Taylor, paso2,paso1
