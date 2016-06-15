@@ -25,7 +25,6 @@ function anima3C(c1,c2,c3, nombre::ASCIIString, loop::Int)
     animacion[:save](nombre*".mp4", extra_args=["-vcodec", "libx264", "-pix_fmt", "yuv420p"])
 end
 
-println("Aqui si")
 
 """
 'muestra_animacion' contiene el código necesario para mostrar en el notebook un video .mp4 que se halle en el mismo directorio que el notebook donde se trabaja
@@ -107,7 +106,7 @@ function Integrador3(cond_ini, tf::Float64, p=28)
     t = 0.
     h = 1
 
-    while t <= tf && h > 1e-8
+    while t <= tf && h > 1e-16
         #Creo arreglos de cada parámetro
         arr_x1 = Float64[p1[end][1]]
         arr_x2 = Float64[p2[end][1]]
@@ -582,10 +581,11 @@ function Energia_3(c1, c2, c3, masas)
 
     ϵ = zeros(length(vc1))
     for j in 1:length(ϵ)
-        ϵ1 = m1*(0.5*norm(vc1[j])^2 - m2/norm(pc2[j] - pc1[j]) - m3/norm(pc3[j] - pc1[j]))
-        ϵ2 = m2*(0.5*norm(vc2[j])^2 - m1/norm(pc1[j] - pc2[j]) - m3/norm(pc3[j] - pc2[j]))
-        ϵ3 = m3*(0.5*norm(vc3[j])^2 - m2/norm(pc2[j] - pc3[j]) - m1/norm(pc1[j] - pc3[j]))
-        ϵ[j] = ϵ1 + ϵ2 + ϵ3
+        K1 = m1*0.5*norm(vc1[j])^2
+        K2 = m2*0.5*norm(vc2[j])^2
+        K3 = m1*0.5*norm(vc3[j])^2
+        U = -G*(m1*m2/norm(pc2[j] - pc1[j]) + m1*m3/norm(pc1[j] - pc3[j]) + m2*m3/norm(pc3[j] - pc2[j]))
+        ϵ[j] = K1 + K2 + K3 + U
     end
     ϵ
 end
