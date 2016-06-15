@@ -1,3 +1,8 @@
+#Modulo de Integración de N Cuerpos
+#El siguiente modulo define las funciones necesarias para realizar la integración de las ecuaciones correspondientes al problema
+#de tres cuerpos, además de funciones que ayudan a analizar las soluciones obtenidas
+#Autores: Daniel (https://github.com/danmarurr) y Fernanda (https://github.com/FernandaPerez)
+
 __precompile__(true)
 
 using TaylorSeries
